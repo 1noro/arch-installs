@@ -1,0 +1,11 @@
+[Unit]
+Description=Autoupdate when booted up after 5 minutes then check for updates at 00min every hour (real time)
+
+[Timer]
+OnBootSec=3min
+OnCalendar=*:0
+Persistent=true
+Unit=my-check-updates.service
+
+[Install]
+WantedBy=multi-user.target

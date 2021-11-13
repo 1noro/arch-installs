@@ -1,0 +1,13 @@
+[Unit]
+Description=My automatic update checker
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/opt/my-check-updates.sh
+TimeoutStopSec=180
+KillMode=process
+KillSignal=SIGINT
+
+[Install]
+WantedBy=multi-user.target

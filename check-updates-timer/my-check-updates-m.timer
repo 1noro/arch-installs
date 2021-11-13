@@ -1,0 +1,10 @@
+[Unit]
+Description=Autoupdate when booted up after 5 minutes then check the system for updates every 60 minutes (monolitic)
+
+[Timer]
+OnBootSec=3min
+OnUnitActiveSec=60min
+Unit=my-check-updates.service
+
+[Install]
+WantedBy=multi-user.target
