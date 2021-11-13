@@ -151,10 +151,5 @@ packagelist_install=(
     #otf-fira-code # no se encuentra
 )
 
-# packagelist_remove=(
-#
-# )
-
 pacman -Syyu
 pacman -S --needed ${packagelist_install[@]}
-# pacman -Rns ${packagelist_remove[@]}

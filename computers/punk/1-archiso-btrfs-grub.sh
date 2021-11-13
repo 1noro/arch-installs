@@ -34,11 +34,11 @@ fdisk /dev/nvme0n1
 # comandos de fdisk:
 # m (listamos la ayuda)
 # g (generamos una tabla GPT)
-# n (creamos sda1)
+# n (creamos nvme0n1p1)
 # t (se selecciona automaticamente la única particion creada)
 # 1 (cambiamos el tipo a EFI System)
-# n (creamos sda2)
-# n (creamos sda3)
+# n (creamos nvme0n1p2)
+# n (creamos nvme0n1p3)
 # p (mostramos cómo va a quedar el resultado)
 # w (escribimos los cambios y salimos)
 
@@ -118,7 +118,8 @@ env EDITOR=nano visudo
 # Si recreamos /home/cosmo manualmente hay que ejecutar:
 # chown cosmo:cosmo /home/cosmo # considerar poner -R
 # si no creamos /home/cosmo manualmente es recomendable ajustar los permisos:
-chmod 755 /home/cosmo
+# chmod 755 /home/cosmo
+# (AHORA USA DOCKER PUTO)
 
 # instalamos, habilitamos y ejecutamos ssh para poder continuar con la
 # instalación desde otro pc de forma remota
@@ -175,14 +176,17 @@ mkinitcpio -p linux
 su cosmo
 mkdir -p ~/Work/aur
 cd ~/Work/aur
+
 git clone https://aur.archlinux.org/aic94xx-firmware.git; \
 cd aic94xx-firmware; \
 makepkg -sri; \
 cd ..
+
 git clone https://aur.archlinux.org/wd719x-firmware.git; \
 cd wd719x-firmware; \
 makepkg -sri; \
 cd ..
+
 # según los foros esto no es necesario, pero a mi me funciona para quitar el 
 # WARNING al recompilar los módulos dinámicos del nucleo.
 # ==> WARNING: Possibly missing firmware for module: xhci_pci
@@ -190,6 +194,7 @@ git clone https://aur.archlinux.org/upd72020x-fw.git; \
 cd upd72020x-fw; \
 makepkg -sri; \
 cd ..
+
 exit
 mkinitcpio -p linux # volvemos a generar el initramfs en /boot
 
