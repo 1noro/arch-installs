@@ -8,10 +8,6 @@ packagelist_install=(
     # atom
     # hunspell-es_es # necesario para el paquete spell-check (https://atom.io/packages/spell-check)
     # code # visual studio code (sin las movidas de microsoft)
-    # dbeaver
-    # eclipse-java
-    # pycharm-community-edition
-    # intellij-idea-community-edition
 
     ## Juegos
     # hace falta instalar lib32-mesa (para procesadores intel) del repositorio
@@ -24,14 +20,10 @@ packagelist_install=(
     openra
     # lutris
     lib32-openssl-1.0 # necesidades para Civilization VI
-    gnugo # juega al GO con una interfaz ASCII por defecto
+    # gnugo # juega al GO con una interfaz ASCII por defecto
 
     ## astronomía
     stellarium
-
-    ## Cryptomonedas
-    # bitcoin core
-    # bitcoin-qt
 
     ## Navegadores
     # firefox-developer-edition

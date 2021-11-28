@@ -5,10 +5,10 @@
 # --- instalar desde AUR
 ## Juegos
 # openrct2-git
-git clone https://aur.archlinux.org/packages/openrct2-git; \
-cd openrct2-git; \
-makepkg -sri; \
-cd ..
+# git clone https://aur.archlinux.org/packages/openrct2-git; \
+# cd openrct2-git; \
+# makepkg -sri; \
+# cd ..
 
 ## Cryptomonedas
 # dogecoin core
@@ -16,6 +16,7 @@ cd ..
 # cd dogecoin-qt; \
 # makepkg -sri; \
 # cd ..
+
 # litecoin core
 # git clone https://aur.archlinux.org/litecoin-qt.git; \
 # cd litecoin-qt; \
@@ -35,13 +36,6 @@ git clone https://aur.archlinux.org/jdownloader2.git; \
 cd jdownloader2; \
 makepkg -sri; \
 cd ..
-
-## Chats y voideoconferencias
-# zoom
-# git clone https://aur.archlinux.org/zoom.git; \
-# cd zoom; \
-# makepkg -sri; \
-# cd ..
 
 ## Arreglar PCs
 # teamviewer
@@ -81,26 +75,9 @@ makepkg -sri; \
 sudo systemctl enable mullvad-daemon; \
 cd ..
 
-## Gnome Shell Extensions
-# system-monitor
-# git clone https://aur.archlinux.org/gnome-shell-extension-system-monitor-git.git; \
-# cd gnome-shell-extension-system-monitor-git; \
-# makepkg -sri; \
-# cd ..
-
-# bubblemail
-# git clone https://aur.archlinux.org/bubblemail.git; \
-# cd bubblemail; \
-# makepkg -sri; \
-# cd ..; \
-# git clone https://aur.archlinux.org/bubblemail-gnome-shell.git; \
-# cd bubblemail-gnome-shell; \
-# makepkg -sri; \
-# cd ..
-
 ## Fuentes
 # iosevka (https://typeof.net/Iosevka/)
-# fuente monospace preciosa; \
+# fuente monospace preciosa
 # git clone https://aur.archlinux.org/ttf-iosevka.git; \
 # cd ttf-iosevka; \
 # makepkg -sri; \
@@ -132,31 +109,16 @@ cd adobe-base-14-fonts; \
 makepkg -sri; \
 cd ..
 
-## GNOME Shell
-# flat-remix-gtk (tema)
-# git clone https://aur.archlinux.org/flat-remix-gtk.git; \
-# cd flat-remix-gtk; \
-# makepkg -sri; \
-# cd ..
-
-## Temas Geany
-# geany-themes
-# git clone https://aur.archlinux.org/geany-themes.git; \
-# cd geany-themes; \
-# makepkg -sri; \
-# cd ..
+# otf-nerd-fonts-fira-code
+git clone https://aur.archlinux.org/otf-nerd-fonts-fira-code.git; \
+cd otf-nerd-fonts-fira-code; \
+makepkg -sri; \
+cd ..
 
 ## Correo electrónico
 # protonmail-bridge (se necesita una cuenta de pago)
 # git clone https://aur.archlinux.org/protonmail-bridge.git; \
 # cd protonmail-bridge; \
-# makepkg -sri; \
-# cd ..
-
-## Minecraft rcon clinet
-# mcrcon
-# git clone https://aur.archlinux.org/mcrcon.git; \
-# cd mcrcon; \
 # makepkg -sri; \
 # cd ..
 
@@ -183,7 +145,7 @@ cd ..
 # makepkg -sri; \
 # cd ..
 
-## Visualk Studio Code (Microsoft Branded)
+## Visual Studio Code (Microsoft Branded)
 # (para poder usar Live Share)
 # visual-studio-code-bin
 git clone https://aur.archlinux.org/visual-studio-code-bin.git; \
@@ -257,10 +219,3 @@ git clone https://aur.archlinux.org/cgoban3.git; \
 cd cgoban3; \
 makepkg -sri; \
 cd ..
-
-## Microsoft Teams
-# teams
-# git clone https://aur.archlinux.org/teams.git; \
-# cd teams; \
-# makepkg -sri; \
-# cd ..

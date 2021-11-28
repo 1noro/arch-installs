@@ -8,9 +8,9 @@ packagelist_install=(
     lm_sensors
     # zsh
     # zsh-syntax-highlighting
+    fish
     nano
     wget
-    # vim
     # net-tools # deprecated (use: ip addr)
     ethtool
     dnsutils
@@ -22,7 +22,7 @@ packagelist_install=(
     neofetch
     git
     rmlint # Limpia home de archivos vacios y enlaces rotos (https://github.com/sahib/rmlint)
-    jdk-openjdk # java 15
+    jdk-openjdk # last java
     # jdk11-openjdk # java 11
     perl-file-mimeinfo # Determine file type, includes mimeopen and mimetype
     udisks2 # temperatura de SSD con SMART
@@ -32,23 +32,22 @@ packagelist_install=(
     pkgstats # https://wiki.archlinux.org/index.php/Pkgstats_(Espa%C3%B1ol)
     nut # Network UPS (SAI) Tools (config: https://wiki.archlinux.org/index.php/Network_UPS_Tools)
     sl # para cuando te equivoques con 'ls'
+    cmatrix # cool
 
     ## utilidades básicas (gráficas)
     firefox
     sxiv # visor de imágenes (complementa a eog)
-    xorg-xkill
+    # xorg-xkill # (si usas wyland no es necesario)
     simple-scan
-    # brasero
     gparted
     easytag
-    gprename # sustituto de pyrenamer
+    # gprename # sustituto de pyrenamer
     filezilla
     wireshark-qt
     bleachbit # limpiador de basura
     gnome-tweaks
     papirus-icon-theme
     seahorse # gestor de claves GPG de GNOME
-    # putty
     keepassxc # gestor de contraseñas
     sshfs # montar carpetas a traves de ssh
 
