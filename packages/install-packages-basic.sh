@@ -5,34 +5,37 @@
 packagelist_install=(
     ## utilidades básicas (no gráficas)
     linux-headers
+    tree
+    htop
+    neofetch
+    git
+    tldr # mejor que man (ejemplos directos)
     lm_sensors
-    # zsh
-    # zsh-syntax-highlighting
+    rmlint # Limpia home de archivos vacios y enlaces rotos (https://github.com/sahib/rmlint)
+    perl-file-mimeinfo # Determine file type, includes mimeopen and mimetype
+    udisks2 # temperatura de SSD con SMART
+    unrar
+    sl # para cuando te equivoques con 'ls'
+    cmatrix # cool
+    # - shells
     fish
-    nano
+    # - entorno C
+    gcc
+    make
+    # - entorno Java
+    jdk-openjdk # last java
+    # jdk11-openjdk # java 11
+    # - utilidades de red
+    curl
     wget
     # net-tools # deprecated (use: ip addr)
     ethtool
     dnsutils
-    tree
-    # tldr
-    htop
     nmap
     iperf3
-    neofetch
-    git
-    rmlint # Limpia home de archivos vacios y enlaces rotos (https://github.com/sahib/rmlint)
-    jdk-openjdk # last java
-    # jdk11-openjdk # java 11
-    perl-file-mimeinfo # Determine file type, includes mimeopen and mimetype
-    udisks2 # temperatura de SSD con SMART
-    unrar
     inetutils # telnet y mas...
-    phonon-qt5-vlc # https://wiki.archlinux.org/index.php/KDE#Phonon (debatir entre GStreamer or VLC)
-    pkgstats # https://wiki.archlinux.org/index.php/Pkgstats_(Espa%C3%B1ol)
     nut # Network UPS (SAI) Tools (config: https://wiki.archlinux.org/index.php/Network_UPS_Tools)
-    sl # para cuando te equivoques con 'ls'
-    cmatrix # cool
+    sshfs # montar carpetas a traves de ssh
 
     ## utilidades básicas (gráficas)
     firefox
@@ -48,8 +51,13 @@ packagelist_install=(
     gnome-tweaks
     papirus-icon-theme
     seahorse # gestor de claves GPG de GNOME
-    keepassxc # gestor de contraseñas
-    sshfs # montar carpetas a traves de ssh
+    keepassxc # gestor de contraseñas de keepass
+    phonon-qt5-vlc # https://wiki.archlinux.org/index.php/KDE#Phonon (debatir entre GStreamer or VLC)
+    pkgstats # https://wiki.archlinux.org/index.php/Pkgstats_(Espa%C3%B1ol)
+    telegram-desktop
+    # - dependencias opcionales de gdk-pixbuf2 (revisar si siguen siendo necesarias)
+    libopenraw # Load .dng, .cr2, .crw, .nef, .orf, .pef, .arw, .erf, .mrw, and .raf
+    webp-pixbuf-loader # Load .webp
 
     ## funcionabilidad total de pulseaudio
     # muchas de estas aplicaciones no vienen instaladas, pero creo que no
@@ -61,14 +69,16 @@ packagelist_install=(
     pavucontrol # permite diferenciar mejor que gnome el audio interno del externo
     # puede que haga falta trastear en el ALSAMIXER para que funcione el micro externo
 
-    ## editores de texto
-    # gedit
-    # geany
-    # geany-plugins
+    ## Editores de texto
     # libreoffice-fresh
-    nvim # en modo de prueba
-    xclip # for X11 clipboard
-    #wl-copy # for WYLAND clipboard
+    nano
+    nvim
+    xclip # for X11 clipboard in nvim
+    #wl-copy # for WYLAND clipboard in nvim
+    
+    ## latex
+    texlive-most
+    biber
 
     ## dependencias
     ### gnome shell system monitor extension dependences
@@ -78,7 +88,7 @@ packagelist_install=(
 
     ## reproductores de vídeo y audio
     vlc
-    # mpv
+    mpv
     rhythmbox
     # cmus # rhythmbox en la terminal
 
@@ -110,17 +120,8 @@ packagelist_install=(
     gnome-mahjongg
     puzzles # https://www.chiark.greenend.org.uk/~sgtatham/puzzles/
     gnome-2048
-    gnome-games # virtual boy advance substitute
+    # gnome-games # virtual boy advance substitute
     # gplanarity
-
-    ## chromium
-    # chromium
-    # chrome-gnome-shell
-
-    ## latex
-    texlive-most
-    biber
-    # texmaker # substituido por atom o vscode
 
     ## fuentes extra
     # (https://wiki.archlinux.org/index.php/Fonts_(Espa%C3%B1ol)#Instalaci%C3%B3n)

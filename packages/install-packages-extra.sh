@@ -25,11 +25,7 @@ packagelist_install=(
     ## astronomía
     stellarium
 
-    ## Navegadores
-    # firefox-developer-edition
-
     ## Chats y voideoconferencias
-    telegram-desktop
     discord
 
     ## Máquinas virtuales
@@ -81,19 +77,12 @@ packagelist_install=(
     # Drivers de impresión
     hplip # HP LaserJet Pro M148fdw
 
-    # Browser
-    # torbrowser-launcher
-
     # Conversor de archivos
     pandoc # (markdown > pdf, markdown > HTML, etc)
 
     # Emuladores de terminal
     cool-retro-term
     # xterm
-
-    # Dependencias opcionales de gdk-pixbuf2 (revisar si siguen siendo necesarias)
-    libopenraw # Load .dng, .cr2, .crw, .nef, .orf, .pef, .arw, .erf, .mrw, and .raf
-    webp-pixbuf-loader # Load .webp
 )
 
 pacman -Syyu
