@@ -5,44 +5,44 @@
 # --- instalar desde AUR
 ## Juegos
 # openrct2-git
-# git clone https://aur.archlinux.org/packages/openrct2-git; \
-# cd openrct2-git; \
-# makepkg -sri; \
+# git clone https://aur.archlinux.org/packages/openrct2-git && \
+# cd openrct2-git && \
+# makepkg -sri && \
 # cd ..
 
 ## Cryptomonedas
 # dogecoin core
-# git clone https://aur.archlinux.org/dogecoin-qt.git; \
-# cd dogecoin-qt; \
-# makepkg -sri; \
+# git clone https://aur.archlinux.org/dogecoin-qt.git && \
+# cd dogecoin-qt && \
+# makepkg -sri && \
 # cd ..
 
 # litecoin core
-# git clone https://aur.archlinux.org/litecoin-qt.git; \
-# cd litecoin-qt; \
-# makepkg -sri; \
+# git clone https://aur.archlinux.org/litecoin-qt.git && \
+# cd litecoin-qt && \
+# makepkg -sri && \
 # cd ..
 
 ## Navegadores
 # google-chrome
-git clone https://aur.archlinux.org/google-chrome.git; \
-cd google-chrome; \
-makepkg -sri; \
+git clone https://aur.archlinux.org/google-chrome.git && \
+cd google-chrome && \
+makepkg -sri && \
 cd ..
 
 ## Descargas
 # jdownloader
-git clone https://aur.archlinux.org/jdownloader2.git; \
-cd jdownloader2; \
-makepkg -sri; \
+git clone https://aur.archlinux.org/jdownloader2.git && \
+cd jdownloader2 && \
+makepkg -sri && \
 cd ..
 
 ## Arreglar PCs
 # teamviewer
-# git clone https://aur.archlinux.org/teamviewer.git; \
-# cd teamviewer; \
-# makepkg -sri; \
-# sudo systemctl enable teamviewerd; \
+# git clone https://aur.archlinux.org/teamviewer.git && \
+# cd teamviewer && \
+# makepkg -sri && \
+# sudo systemctl enable teamviewerd && \
 # cd ..
 
 ## VPNs
@@ -69,102 +69,102 @@ gpg2 --edit-key 8339C7D2942EB854E3F27CE5AEE9DECFD582E984
 # > s
 # > q
 # ya hora puedo instalar el paquete
-git clone https://aur.archlinux.org/mullvad-vpn.git; \
-cd mullvad-vpn; \
-makepkg -sri; \
-sudo systemctl enable mullvad-daemon; \
+git clone https://aur.archlinux.org/mullvad-vpn.git && \
+cd mullvad-vpn && \
+makepkg -sri && \
+sudo systemctl enable mullvad-daemon && \
 cd ..
 
 ## Fuentes
 # iosevka (https://typeof.net/Iosevka/)
 # fuente monospace preciosa
-# git clone https://aur.archlinux.org/ttf-iosevka.git; \
-# cd ttf-iosevka; \
-# makepkg -sri; \
+# git clone https://aur.archlinux.org/ttf-iosevka.git && \
+# cd ttf-iosevka && \
+# makepkg -sri && \
 # cd ..
 
 # mononoki (https://madmalik.github.io/mononoki/)
 # fuente monospace preciosa
-# git clone https://aur.archlinux.org/ttf-mononoki-git.git; \
-# cd ttf-mononoki-git; \
-# makepkg -sri; \
+# git clone https://aur.archlinux.org/ttf-mononoki-git.git && \
+# cd ttf-mononoki-git && \
+# makepkg -sri && \
 # cd ..
 
 # ttf-ms-fonts (https://madmalik.github.io/mononoki/)
 # Core TTF Fonts from Microsoft, puede que necesaria para alguna apliación
-git clone https://aur.archlinux.org/ttf-ms-fonts.git; \
-cd ttf-ms-fonts; \
-makepkg -sri; \
+git clone https://aur.archlinux.org/ttf-ms-fonts.git && \
+cd ttf-ms-fonts && \
+makepkg -sri && \
 cd ..
 
 # open-dyslexic-fonts (https://opendyslexic.org/)
-git clone https://aur.archlinux.org/open-dyslexic-fonts.git; \
-cd open-dyslexic-fonts; \
-makepkg -sri; \
+git clone https://aur.archlinux.org/open-dyslexic-fonts.git && \
+cd open-dyslexic-fonts && \
+makepkg -sri && \
 cd ..
 
 # adobe-base-14-fonts (Courier, Helvetica, Times, Symbol, ZapfDingbats with Type1)
-git clone https://aur.archlinux.org/adobe-base-14-fonts.git; \
-cd adobe-base-14-fonts; \
-makepkg -sri; \
+git clone https://aur.archlinux.org/adobe-base-14-fonts.git && \
+cd adobe-base-14-fonts && \
+makepkg -sri && \
 cd ..
 
 # otf-nerd-fonts-fira-code
-git clone https://aur.archlinux.org/otf-nerd-fonts-fira-code.git; \
-cd otf-nerd-fonts-fira-code; \
-makepkg -sri; \
+git clone https://aur.archlinux.org/otf-nerd-fonts-fira-code.git && \
+cd otf-nerd-fonts-fira-code && \
+makepkg -sri && \
 cd ..
 
 ## Correo electrónico
 # protonmail-bridge (se necesita una cuenta de pago)
-# git clone https://aur.archlinux.org/protonmail-bridge.git; \
-# cd protonmail-bridge; \
-# makepkg -sri; \
+# git clone https://aur.archlinux.org/protonmail-bridge.git && \
+# cd protonmail-bridge && \
+# makepkg -sri && \
 # cd ..
 
 ## Autofirma
 # autofirma
-# git clone https://aur.archlinux.org/autofirma.git; \
-# cd autofirma; \
-# makepkg -sri; \
+# git clone https://aur.archlinux.org/autofirma.git && \
+# cd autofirma && \
+# makepkg -sri && \
 # cd ..
 
 ## Packet Tracer
 # packettracer
 # necesitas el deb de la versión mas actualizada del packet tracer
 # descargado desde: https://www.netacad.com/portal/resources/packet-tracer
-# git clone https://aur.archlinux.org/packettracer.git; \
-# cd packettracer; \
-# makepkg -sri; \
+# git clone https://aur.archlinux.org/packettracer.git && \
+# cd packettracer && \
+# makepkg -sri && \
 # cd ..
 
 ## Speedtest by Ookla
 # speedtest
-# git clone https://aur.archlinux.org/ookla-speedtest-bin.git; \
-# cd ookla-speedtest-bin; \
-# makepkg -sri; \
+# git clone https://aur.archlinux.org/ookla-speedtest-bin.git && \
+# cd ookla-speedtest-bin && \
+# makepkg -sri && \
 # cd ..
 
 ## Visual Studio Code (Microsoft Branded)
 # (para poder usar Live Share)
 # visual-studio-code-bin
-git clone https://aur.archlinux.org/visual-studio-code-bin.git; \
-cd visual-studio-code-bin; \
-makepkg -sri; \
+git clone https://aur.archlinux.org/visual-studio-code-bin.git && \
+cd visual-studio-code-bin && \
+makepkg -sri && \
 cd ..
 
 ## NewsFlash, The spiritual successor to FeedReader
 # newsflash-git
-# git clone https://aur.archlinux.org/newsflash-git.git; \
-# cd newsflash-git; \
-# makepkg -sri; \
+# git clone https://aur.archlinux.org/newsflash-git.git && \
+# cd newsflash-git && \
+# makepkg -sri && \
 # cd ..
 
 ## Android Studio: The official Android IDE (Stable branch)
 # android-studio
-# git clone https://aur.archlinux.org/android-studio.git; \
-# cd android-studio; \
-# makepkg -sri; \
+# git clone https://aur.archlinux.org/android-studio.git && \
+# cd android-studio && \
+# makepkg -sri && \
 # cd ..
 ## PARA REINSTALAR BORRAR TODAS LAS CARPETAS "android", "Google" y "gradle" QUE HAY EN TU $HOME
 ## ACEPTAR LICENCIAS
@@ -175,47 +175,47 @@ cd ..
 
 ## Godot
 # godot
-# git clone https://aur.archlinux.org/godot.git; \
-# cd godot; \
-# makepkg -sri; \
+# git clone https://aur.archlinux.org/godot.git && \
+# cd godot && \
+# makepkg -sri && \
 # cd ..
 
 ## mahjong (https://mahjong.julianbradfield.org/)
 # mahjong
-# git clone https://aur.archlinux.org/mahjong.git; \
-# cd mahjong; \
-# makepkg -sri; \
+# git clone https://aur.archlinux.org/mahjong.git && \
+# cd mahjong && \
+# makepkg -sri && \
 # cd ..
 
 ## nut-monitor (https://wiki.archlinux.org/index.php/Network_UPS_Tools#NUT-Monitor)
 # nut-monitor (pygtk es una dependencia y parece que no es tan facil instalarla)
-# git clone https://aur.archlinux.org/nut-monitor.git; \
-# cd nut-monitor; \
-# makepkg -sri; \
+# git clone https://aur.archlinux.org/nut-monitor.git && \
+# cd nut-monitor && \
+# makepkg -sri && \
 # cd ..
 # DESINSTALAR: sudo pacman -Rns nut-monitor
 
 ## rdfind (https://rdfind.pauldreik.se/)
 # Redundant data find - a program that finds duplicate files.
 # rdfind
-git clone https://aur.archlinux.org/rdfind.git; \
+git clone https://aur.archlinux.org/rdfind.git && \
 gpg --keyserver keyserver.ubuntu.com --search-keys 5C4A26CD4CC8C397 \
-cd rdfind; \
-makepkg -sri; \
+cd rdfind && \
+makepkg -sri && \
 cd ..
 
 ## lyrebird (https://github.com/lyrebird-voice-changer/lyrebird)
 # Simple and powerful voice changer for Linux, written in GTK 3
 # lyrebird
-# git clone https://aur.archlinux.org/lyrebird.git; \
-# cd lyrebird; \
-# makepkg -sri; \
+# git clone https://aur.archlinux.org/lyrebird.git && \
+# cd lyrebird && \
+# makepkg -sri && \
 # cd ..
 
 ## cgoban3 (https://gokgs.com)
 # A KGS client and SGF editor (edit Go scenarios)
 # cgoban3
-git clone https://aur.archlinux.org/cgoban3.git; \
-cd cgoban3; \
-makepkg -sri; \
+git clone https://aur.archlinux.org/cgoban3.git && \
+cd cgoban3 && \
+makepkg -sri && \
 cd ..

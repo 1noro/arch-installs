@@ -17,7 +17,7 @@ packagelist_install=(
     gnome-usage # gnaome-system-monitor
 )
 
-pacman -Rns ${packagelist_install[@]}
+pacman -Rns "${packagelist_install[@]}"
 # n: borra archivos de configuración
 
 # equivalente a apt autoremove:

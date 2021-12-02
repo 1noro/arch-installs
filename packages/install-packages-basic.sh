@@ -153,4 +153,4 @@ packagelist_install=(
 )
 
 pacman -Syyu
-pacman -S --needed ${packagelist_install[@]}
+pacman -S --needed "${packagelist_install[@]}"
