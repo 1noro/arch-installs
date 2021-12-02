@@ -1,3 +1,4 @@
+#!/bin/bash
 # punk btrfs (GRUB) ARCHISO
 # LEER: https://wiki.archlinux.org/index.php/User:Altercation/Bullet_Proof_Arch_Install#Our_partition_plans
 
@@ -123,7 +124,7 @@ env EDITOR=nano visudo
 
 # instalamos, habilitamos y ejecutamos ssh para poder continuar con la
 # instalación desde otro pc de forma remota
-pacman -S openssh
+pacman -S --noconfirm --needed openssh
 systemctl enable sshd
 
 # configuramos la hora (no se porqué esto no funcinó bien la primera vez y
@@ -151,7 +152,7 @@ echo '127.0.1.1	punk.jamaica.h.a3do.net	punk' >> /etc/hosts
 
 # instalamos y habilitamos el demonio más básico de dhcp para que al reiniciar
 # no nos quedemos sin internet
-pacman -S dhcpcd
+pacman -S --noconfirm --needed dhcpcd
 systemctl enable dhcpcd
 
 # --- módulos de kernel necesarios
@@ -204,10 +205,10 @@ mkinitcpio -p linux # volvemos a generar el initramfs en /boot
 
 # instalamos y habilitamos las actualizacionse tempranas de microcodigo
 # para procesadores intel
-pacman -S intel-ucode
+pacman -S --noconfirm --needed intel-ucode
 
 # -- instalación y configuración inicial de GRUB
-pacman -S grub efibootmgr
+pacman -S --noconfirm --needed grub efibootmgr
 grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
 # https://wiki.archlinux.org/index.php/Kernel_parameters_(Espa%C3%B1ol)
 # https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html
