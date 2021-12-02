@@ -6,6 +6,7 @@ packagelist_install=(
     ## utilidades básicas (no gráficas)
     linux-headers
     tree
+    fzf # de lo mejorcito
     htop
     neofetch
     git
