@@ -29,7 +29,7 @@ packagelist_install=(
     # - utilidades de red
     curl
     wget
-    # net-tools # deprecated (use: ip addr)
+    net-tools # deprecated (use: ip addr)
     ethtool
     dnsutils
     nmap
@@ -37,6 +37,9 @@ packagelist_install=(
     inetutils # telnet y mas...
     nut # Network UPS (SAI) Tools (config: https://wiki.archlinux.org/index.php/Network_UPS_Tools)
     sshfs # montar carpetas a traves de ssh
+    aircrack-ng
+    wireless_tools
+    macchanger
 
     ## utilidades básicas (gráficas)
     firefox
