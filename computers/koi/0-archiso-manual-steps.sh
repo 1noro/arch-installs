@@ -13,3 +13,27 @@ ip addr
 
 # -- verificamos que entramos en modo UEFI
 ls /sys/firmware/efi/efivars
+
+# -- particionado del disco ----------------------------------------------------
+lsblk
+
+# - tabla de particiones GPT (GRUB)
+# https://wiki.archlinux.org/index.php/EFI_system_partition#GPT_partitioned_disks
+# https://gtronick.github.io/ALIG/
+# NAME            SIZE  TYPE                    MOUNTPOINT
+# sda           223,6G  disk
+#   sda1        512,0M  part EFI System (ESP)   /boot
+#   sda2         16,0G  part                    [SWAP]
+#   sda3        207,1G  part                    [BTRFS VOLUMES]
+
+fdisk /dev/nvme0n1
+# comandos de fdisk:
+# m (listamos la ayuda)
+# g (generamos una tabla GPT)
+# n (creamos sda1)
+# t (se selecciona automaticamente la única particion creada)
+# 1 (cambiamos el tipo a EFI System)
+# n (creamos sda2)
+# n (creamos sda3)
+# p (mostramos cómo va a quedar el resultado)
+# w (escribimos los cambios y salimos)
