@@ -2,43 +2,33 @@
 # koi btrfs (GRUB) ARCHISO
 # LEER: https://wiki.archlinux.org/index.php/User:Altercation/Bullet_Proof_Arch_Install#Our_partition_plans
 
+if [[ $(id -u) -ne 0 ]]; then
+    echo "This script must be run as root" 
+    exit 1
+fi
+
+if [ -z "$1" ]; then
+    echo "Usage: $0 <HDD_DEVICE>"
+    echo "Example: $0 /dev/sda"
+    exit 1
+fi
+
+HDD=$1
+
 # -- verificamos que entramos en modo UEFI
-ls /sys/firmware/efi/efivars
+ls -A /sys/firmware/efi/efivars || exit
 
 # -- activamos el servidor ntp para la hora
 timedatectl set-ntp true
+echo "## comprobamos la hora NTP"
 timedatectl status # (verificación)
 
-# -- inicio del particionado y formateo de los HDDs ----------------------------
-lsblk
-
-# - tabla de particiones GPT (systemd-boot)
-# https://wiki.archlinux.org/index.php/EFI_system_partition#GPT_partitioned_disks
-# https://fhackts.wordpress.com/2016/09/09/installing-archlinux-the-efisystemd-boot-way/
-# https://gtronick.github.io/ALIG/
-# NAME            SIZE  TYPE                    MOUNTPOINT
-# nvme0n1       931,5G  disk
-#   nvme0n1p1   512,0M  part EFI System (ESP)   /boot
-#   nvme0n1p2    16,0G  part                    [SWAP]
-#   nvme0n1p3   914,0G  part                    /
-
-fdisk /dev/nvme0n1
-# comandos de fdisk:
-# m (listamos la ayuda)
-# g (generamos una tabla GPT)
-# n (creamos nvme0n1p1)
-# t (se selecciona automaticamente la única particion creada)
-# 1 (cambiamos el tipo a EFI System)
-# n (creamos nvme0n1p2)
-# n (creamos nvme0n1p3)
-# p (mostramos cómo va a quedar el resultado)
-# w (escribimos los cambios y salimos)
-
-lsblk -fm
-mkfs.fat -F32 -n EFI /dev/nvme0n1p1
-mkswap -L swap /dev/nvme0n1p2
+# -- formateo del disco --------------------------------------------------------
+# lsblk -fm
+mkfs.fat -F32 -n EFI "${HDD}1"
+mkswap -L swap "${HDD}2"
 swapon -L swap
-mkfs.btrfs --force --label system /dev/nvme0n1p3 # nótese que aquí asignamos el nombre "system" a nuestra partición
+mkfs.btrfs --force --label system "${HDD}3" # nótese que aquí asignamos el nombre "system" a nuestra partición
 
 # definimos las variables "o" y "o_btrfs" para las opciones de montaje
 o=defaults,x-mount.mkdir
