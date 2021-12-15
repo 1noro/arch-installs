@@ -91,7 +91,7 @@ packagelist_install=(
     clutter # (debian) gir1.2-clutter-1.0
 
     ## reproductores de vídeo y audio
-    vlc
+    # vlc
     mpv
     rhythmbox
     # cmus # rhythmbox en la terminal
