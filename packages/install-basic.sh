@@ -7,6 +7,7 @@ packagelist_install=(
     linux-headers
     tree
     fzf # de lo mejorcito
+    exa # ls mejorado
     htop
     neofetch
     git
