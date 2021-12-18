@@ -2,6 +2,7 @@
 # koi btrfs (GRUB) ARCHISO manual steps
 # LEER: https://wiki.archlinux.org/index.php/User:Altercation/Bullet_Proof_Arch_Install#Our_partition_plans
 
+# -- comprobaciones iniciales --------------------------------------------------
 # -- comprobación de red DHCP (por cable)
 ping archlinux.org
 
@@ -26,7 +27,7 @@ lsblk
 #   sda2         16,0G  part                    [SWAP]
 #   sda3        207,1G  part                    [BTRFS VOLUMES]
 
-fdisk /dev/nvme0n1
+fdisk /dev/sda
 # comandos de fdisk:
 # m (listamos la ayuda)
 # g (generamos una tabla GPT)
@@ -37,3 +38,22 @@ fdisk /dev/nvme0n1
 # n (creamos sda3)
 # p (mostramos cómo va a quedar el resultado)
 # w (escribimos los cambios y salimos)
+
+# -- ejecución de scripts ------------------------------------------------------
+pacamn -Syy && pacman -S --noconfirm --needed git
+git clone https://github.com/1noro/arch-installs.git
+
+# script base
+bash arch-installs/computers/koi/1-archiso-btrfs-grub-base.sh /dev/sda
+
+# script chroot
+cp arch-installs/computers/koi/2-archiso-btrfs-grub-custom.sh /mnt/tmp/
+arch-chroot /mnt bash /tmp/2-archiso-btrfs-grub-chroot.sh
+
+# -- pasos finales -------------------------------------------------------------
+# desmontamos con seguridad el entorno de instalación
+sync && \
+umount -R /mnt
+
+# reiniciamos
+reboot

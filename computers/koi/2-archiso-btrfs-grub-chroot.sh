@@ -2,97 +2,22 @@
 # koi btrfs (GRUB) ARCHISO
 # LEER: https://wiki.archlinux.org/index.php/User:Altercation/Bullet_Proof_Arch_Install#Our_partition_plans
 
+set -e
+
 if [[ $(id -u) -ne 0 ]]; then
     echo "This script must be run as root" 
     exit 1
 fi
 
-if [ -z "$1" ]; then
-    echo "Usage: $0 <HDD_DEVICE>"
-    echo "Example: $0 /dev/sda"
-    exit 1
-fi
-
-HDD=$1
-
-# -- verificamos que entramos en modo UEFI
-ls -A /sys/firmware/efi/efivars || exit
-
-# -- activamos el servidor ntp para la hora
-timedatectl set-ntp true
-echo "## comprobamos la hora NTP"
-timedatectl status # (verificación)
-
-# -- formateo del disco --------------------------------------------------------
-# lsblk -fm
-mkfs.fat -F32 -n EFI "${HDD}1"
-mkswap -L swap "${HDD}2"
-swapon -L swap
-mkfs.btrfs --force --label system "${HDD}3" # nótese que aquí asignamos el nombre "system" a nuestra partición
-
-# definimos las variables "o" y "o_btrfs" para las opciones de montaje
-o=defaults,x-mount.mkdir
-o_btrfs=$o,compress=lzo,ssd,noatime
-
-# montamos nuestra partición "system" en /mnt
-mount -t btrfs LABEL=system /mnt
-
-# creamos los subvolumes btrfs
-btrfs subvolume create /mnt/root
-btrfs subvolume create /mnt/home
-#btrfs subvolume create /mnt/snapshots # puede que en el futuro si uso snapper esto no haga falta
-
-# desmontamos todo
-umount -R /mnt
-
-# y ahora montamos los sobvolumenes en su orden correspondiente
-mount -t btrfs -o subvol=root,$o_btrfs LABEL=system /mnt
-mount -t btrfs -o subvol=home,$o_btrfs LABEL=system /mnt/home
-#mount -t btrfs -o subvol=snapshots,$o_btrfs LABEL=system /mnt/.snapshots # puede que en el futuro si uso snapper esto no haga falta
-
-# montamos la partición EFI
-mkdir /mnt/boot
-mount LABEL=EFI /mnt/boot
-lsblk -fm
-
-# -- instalamos el sistema base en el disco particionado (pensar en que
-# paquetes son necesarios aquí desde el principio)
-# nano /etc/pacman.d/mirrorlist
-# agregar al principio de todo las lineas:
-# Server = http://mirror.librelabucm.org/archlinux/$repo/os/$arch
-# Server = http://ftp.rediris.es/mirror/archlinux/$repo/os/$arch
-sed -i '1 i\Server = http://mirror.librelabucm.org/archlinux/$repo/os/$arch' /etc/pacman.d/mirrorlist
-sed -i '1 i\Server = http://ftp.rediris.es/mirror/archlinux/$repo/os/$arch' /etc/pacman.d/mirrorlist
-pacman -Syy # refrescamos los repositorios al cambiar el mirrorlist
-pacstrap /mnt base base-devel linux linux-firmware dosfstools exfat-utils btrfs-progs e2fsprogs ntfs-3g man-db man-pages texinfo sudo git nano zsh
-
-# - este mensaje es completamente normal mientras no generemos los locales
-# perl: warning: Setting locale failed.
-# perl: warning: Please check that your locale settings:
-# 	LANGUAGE = (unset),
-# 	LC_ALL = (unset),
-# 	LC_MESSAGES = "",
-# 	LANG = "en_US.UTF-8"
-#     are supported and installed on your system.
-# perl: warning: Falling back to the standard locale ("C").
-
-# -- generamos el fstab tal cual como lo tenemos montado en la instalación
-# genfstab -U /mnt > /mnt/etc/fstab # Use UUIDs for source identifiers
-genfstab -L /mnt > /mnt/etc/fstab # Use labels for source identifiers
-
-# -- nos impersonamos como root en nuestro sistema de archivos a instalar
-arch-chroot /mnt
-# CHROOT MODE
-
 # asignamos una contrseña a root
 passwd
 
 # creamos y configuramos un nuevo usuario para podrer instalar paquetes desde AUR
-useradd -s /bin/zsh -m cosmo # considerar quitar la opción -m (create_home)
+useradd -s /bin/fish -m cosmo # considerar quitar la opción -m (create_home)
 passwd cosmo
 # usermod -a -G sudo cosmo
 # --- inicio sudo manual ---
-env EDITOR=nano visudo
+env EDITOR=nvim visudo
 # agregar la siguiente linea:
 # cosmo ALL=(ALL) ALL
 # --- fin sudo manual ---
@@ -127,9 +52,11 @@ echo 'LANG=es_ES.UTF-8' > /etc/locale.conf
 echo 'punk' > /etc/hostname
 # nano /etc/hosts
 # - agregar las siguientes lineas
-echo '127.0.0.1	localhost' >> /etc/hosts; \
-echo '::1		localhost' >> /etc/hosts; \
-echo '127.0.1.1	punk.jamaica.h.a3do.net	punk' >> /etc/hosts
+{
+    echo '127.0.0.1	localhost'
+    echo '::1		localhost'
+    echo '127.0.1.1	punk.jamaica.h.a3do.net	punk'
+} >> /etc/hosts
 
 # instalamos y habilitamos el demonio más básico de dhcp para que al reiniciar
 # no nos quedemos sin internet
@@ -150,37 +77,34 @@ sed -i 's/MODULES=()/MODULES=(i915)/g' /etc/mkinitcpio.conf
 mkinitcpio -p linux
 # comprobar aquí si falta algún módulo por cargar para este hardware específico
 
-# --- INICIO DE COMANDOS EXCLUSIVOS PARA PUNK ----------------------------------
+# --- INICIO DE COMANDOS EXCLUSIVOS PARA KOI -----------------------------------
 # (https://gist.github.com/imrvelj/c65cd5ca7f5505a65e59204f5a3f7a6d)
 # solución para los warnings:
 # ==> WARNING: Possibly missing firmware for module: aic94xx
 # ==> WARNING: Possibly missing firmware for module: wd719x
-su cosmo
-mkdir -p ~/Work/aur
-cd ~/Work/aur
+su cosmo -c 'mkdir -p ~/Work/aur'
 
-git clone https://aur.archlinux.org/aic94xx-firmware.git; \
-cd aic94xx-firmware; \
-makepkg -sri; \
-cd ..
+su cosmo -c 'cd ~/Work/aur && \
+    git clone https://aur.archlinux.org/aic94xx-firmware.git && \
+    cd aic94xx-firmware && \
+    makepkg -sri'
 
-git clone https://aur.archlinux.org/wd719x-firmware.git; \
-cd wd719x-firmware; \
-makepkg -sri; \
-cd ..
+su cosmo -c 'cd ~/Work/aur && \
+    git clone https://aur.archlinux.org/wd719x-firmware.git && \
+    cd wd719x-firmware && \
+    makepkg -sri'
 
 # según los foros esto no es necesario, pero a mi me funciona para quitar el 
 # WARNING al recompilar los módulos dinámicos del nucleo.
 # ==> WARNING: Possibly missing firmware for module: xhci_pci
-git clone https://aur.archlinux.org/upd72020x-fw.git; \
-cd upd72020x-fw; \
-makepkg -sri; \
-cd ..
+su cosmo -c 'cd ~/Work/aur && \
+    git clone https://aur.archlinux.org/upd72020x-fw.git && \
+    cd upd72020x-fw && \
+    makepkg -sri'
 
-exit
 mkinitcpio -p linux # volvemos a generar el initramfs en /boot
 
-# --- FINAL DE COMANDOS EXCLUSIVOS PARA PUNK -----------------------------------
+# --- FINAL DE COMANDOS EXCLUSIVOS PARA KOI ------------------------------------
 
 # --- GESTOR DE ARRANQUE DEL SISTEMA -------------------------------------------
 
@@ -204,20 +128,4 @@ sed -i 's/loglevel=3 quiet/loglevel=4 nowatchdog i915.enable_guc=2/g' /etc/defau
 sed -i 's/GRUB_TIMEOUT=5/GRUB_TIMEOUT=2/g' /etc/default/grub
 grub-mkconfig -o /boot/grub/grub.cfg
 
-
 # --- FIN GESTOR DE ARRANQUE DEL SISTEMA ---------------------------------------
-
-# salimos del entorno chroot, y volvemos al instalador de arch (archiso)
-exit
-# BACK TO ARCHISO
-
-# desmontamos con seguridad el entorno de instalación
-sync; \
-umount -R /mnt
-
-# reiniciamos
-reboot
-
-# extraemos el medio de instalación (USB o CD/DVD)
-
-# continuar con los pasos de punk-first-boot-configs.sh
