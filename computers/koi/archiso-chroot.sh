@@ -29,9 +29,10 @@ HOSTNAME="koi"
 sed -i '/Color/s/^#//g' /etc/pacman.conf
 sed -i '/VerbosePkgLists/s/^#//g' /etc/pacman.conf
 sed -i '/ParallelDownloads = 5/s/^#//g' /etc/pacman.conf
-# sed -i '/^VerbosePkgLists/a ParallelDownloads = 5' /etc/pacman.conf
+
 sed -i '/\[multilib\]/s/^#//g' /etc/pacman.conf
-sed -i '/Include = \/etc\/pacman\.d\/mirrorlist/s/^#//g' /etc/pacman.conf
+# Include = /etc/pacman.d/mirrorlist
+sed -i '/^#\[multilib]/{N;s/\n#/\n/}' /etc/pacman.conf
 
 pacman -Syyu --noconfirm # actualizamos el sistema
 
@@ -53,12 +54,12 @@ Exec = /usr/bin/paccache -r" >> /etc/pacman.d/hooks/remove_old_cache.hook
 
 # -- USUARIOS ------------------------------------------------------------------
 # asignamos una contrseña a root
-echo -e "## Contraseña para \[\e[36m\]root\[\e[m\]"
+echo -e "## Contraseña para \e[36mroot\e[m"
 passwd
 
 # creamos y configuramos un nuevo usuario para podrer instalar paquetes desde AUR
 useradd -s /bin/fish -m "$USER" # considerar quitar la opción -m (create_home)
-echo "## Contraseña para \[\e[36m\]$USER\[\e[m\]"
+echo "## Contraseña para \e[36m$USER\e[m"
 passwd "$USER"
 # usermod -a -G sudo "$USER"
 # --- inicio sudo manual ---
