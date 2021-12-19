@@ -54,7 +54,7 @@ mount -t btrfs -o subvol=home,$o_btrfs LABEL=system /mnt/home
 # montamos la partición EFI
 mkdir /mnt/boot
 mount LABEL=EFI /mnt/boot
-lsblk -fm
+lsblk
 
 # -- instalamos el sistema base en el disco particionado (pensar en que
 # paquetes son necesarios aquí desde el principio)
@@ -66,6 +66,7 @@ sed -i '1 i\Server = http://mirror.librelabucm.org/archlinux/$repo/os/$arch' /et
 sed -i '1 i\Server = http://ftp.rediris.es/mirror/archlinux/$repo/os/$arch' /etc/pacman.d/mirrorlist
 pacman -Syy # refrescamos los repositorios al cambiar el mirrorlist
 pacstrap /mnt base base-devel linux linux-firmware dosfstools exfat-utils btrfs-progs e2fsprogs ntfs-3g man-db man-pages texinfo sudo git neovim fish
+cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
 
 # - este mensaje es completamente normal mientras no generemos los locales
 # perl: warning: Setting locale failed.

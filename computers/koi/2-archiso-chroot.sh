@@ -8,24 +8,24 @@ if [[ $(id -u) -ne 0 ]]; then
     exit 1
 fi
 
+USER="cosmo"
+HOSTNAME="koi"
+
 # asignamos una contrseña a root
+echo "## Contraseña para root"
 passwd
 
 # creamos y configuramos un nuevo usuario para podrer instalar paquetes desde AUR
-useradd -s /bin/fish -m cosmo # considerar quitar la opción -m (create_home)
-passwd cosmo
-# usermod -a -G sudo cosmo
+useradd -s /bin/fish -m "$USER" # considerar quitar la opción -m (create_home)
+echo "## Contraseña para $USER"
+passwd "$USER"
+# usermod -a -G sudo "$USER"
 # --- inicio sudo manual ---
-env EDITOR=nvim visudo
+# env EDITOR=nvim visudo
 # agregar la siguiente linea:
 # cosmo ALL=(ALL) ALL
 # --- fin sudo manual ---
-
-# Si recreamos /home/cosmo manualmente hay que ejecutar:
-# chown cosmo:cosmo /home/cosmo # considerar poner -R
-# si no creamos /home/cosmo manualmente es recomendable ajustar los permisos:
-# chmod 755 /home/cosmo
-# (AHORA USA DOCKER PUTO)
+echo "$USER	ALL=(ALL) ALL" >> /etc/sudoers
 
 # instalamos, habilitamos y ejecutamos ssh para poder continuar con la
 # instalación desde otro pc de forma remota
@@ -48,13 +48,13 @@ locale-gen
 echo 'LANG=es_ES.UTF-8' > /etc/locale.conf
 
 # ponemos nombre al equipo
-echo 'punk' > /etc/hostname
+echo "$HOSTNAME" > /etc/hostname
 # nano /etc/hosts
 # - agregar las siguientes lineas
 {
-    echo '127.0.0.1	localhost'
-    echo '::1		localhost'
-    echo '127.0.1.1	punk.jamaica.h.a3do.net	punk'
+    echo "127.0.0.1	localhost"
+    echo "::1		localhost"
+    echo "127.0.1.1	$HOSTNAME.jamaica.h.a3do.net	$HOSTNAME"
 } >> /etc/hosts
 
 # instalamos y habilitamos el demonio más básico de dhcp para que al reiniciar
@@ -81,14 +81,14 @@ mkinitcpio -p linux
 # solución para los warnings:
 # ==> WARNING: Possibly missing firmware for module: aic94xx
 # ==> WARNING: Possibly missing firmware for module: wd719x
-su cosmo -c 'mkdir -p ~/Work/aur'
+su "$USER" -c 'mkdir -p ~/Work/aur'
 
-su cosmo -c 'cd ~/Work/aur && \
+su "$USER" -c 'cd ~/Work/aur && \
     git clone https://aur.archlinux.org/aic94xx-firmware.git && \
     cd aic94xx-firmware && \
     makepkg -sri'
 
-su cosmo -c 'cd ~/Work/aur && \
+su "$USER" -c 'cd ~/Work/aur && \
     git clone https://aur.archlinux.org/wd719x-firmware.git && \
     cd wd719x-firmware && \
     makepkg -sri'
@@ -96,7 +96,7 @@ su cosmo -c 'cd ~/Work/aur && \
 # según los foros esto no es necesario, pero a mi me funciona para quitar el 
 # WARNING al recompilar los módulos dinámicos del nucleo.
 # ==> WARNING: Possibly missing firmware for module: xhci_pci
-su cosmo -c 'cd ~/Work/aur && \
+su "$USER" -c 'cd ~/Work/aur && \
     git clone https://aur.archlinux.org/upd72020x-fw.git && \
     cd upd72020x-fw && \
     makepkg -sri'
