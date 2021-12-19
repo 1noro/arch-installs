@@ -11,6 +11,44 @@ fi
 USER="cosmo"
 HOSTNAME="koi"
 
+# -- PACMAN --------------------------------------------------------------------
+# el mirrorlis ya está optimizado
+# https://wiki.archlinux.org/index.php/Mirrors_(Espa%C3%B1ol)#Lista_por_velocidad
+
+# -- editamos la configuración
+# nvim /etc/pacman.conf
+# descomentar las siguientes lineas:
+# - en Misc options:
+#Color
+#VerbosePkgLists
+#ParallelDownloads = 3
+# - en los repositorios:
+#[multilib]
+#Include = /etc/pacman.d/mirrorlist
+
+sed -i '/Color/s/^#//g' /etc/pacman.conf
+sed -i '/VerbosePkgLists/s/^#//g' /etc/pacman.conf
+sed -i '/^VerbosePkgLists/a ParallelDownloads = 5' /etc/pacman.conf
+
+pacman -Syyu --noconfirm # actualizamos el sistema
+
+# -- agregamos el hook (trigger) para limpiar la cache de pacman
+# https://wiki.archlinux.org/index.php/Pacman_(Espa%C3%B1ol)#Limpiar_la_memoria_cach%C3%A9_de_los_paquetes
+pacman -S --noconfirm --needed pacman-contrib
+mkdir -p /etc/pacman.d/hooks/
+echo "[Trigger]
+Operation = Upgrade
+Operation = Install
+Operation = Remove
+Type = Package
+Target = *
+
+[Action]
+Description = Cleaning pacman cache...
+When = PostTransaction
+Exec = /usr/bin/paccache -r" >> /etc/pacman.d/hooks/remove_old_cache.hook
+
+# -- USUARIOS ------------------------------------------------------------------
 # asignamos una contrseña a root
 echo "## Contraseña para root"
 passwd
@@ -27,16 +65,15 @@ passwd "$USER"
 # --- fin sudo manual ---
 echo "$USER	ALL=(ALL) ALL" >> /etc/sudoers
 
-# instalamos, habilitamos y ejecutamos ssh para poder continuar con la
-# instalación desde otro pc de forma remota
-pacman -S --noconfirm --needed openssh
-systemctl enable sshd
 
+# -- HORA ----------------------------------------------------------------------
 # configuramos la hora (no se porqué esto no funcinó bien la primera vez y
 # luego tuve que volver a configurarlo desde gnome)
 ln -sf /usr/share/zoneinfo/Europe/Madrid /etc/localtime
 hwclock --systohc
 
+
+# -- IDIOMA --------------------------------------------------------------------
 # configuramos el idioma por defecto del equipo
 # nvim /etc/locale.gen
 # descomentamos:
@@ -47,6 +84,8 @@ sed -i '/es_ES.UTF-8 UTF-8/s/^#//g' /etc/locale.gen
 locale-gen
 echo "LANG=es_ES.UTF-8" > /etc/locale.conf
 
+
+# -- HOSTNAME ------------------------------------------------------------------
 # ponemos nombre al equipo
 echo "$HOSTNAME" > /etc/hostname
 # nvim /etc/hosts
@@ -57,13 +96,8 @@ echo "$HOSTNAME" > /etc/hostname
     echo "127.0.1.1	$HOSTNAME.jamaica.h.a3do.net	$HOSTNAME"
 } >> /etc/hosts
 
-# instalamos y habilitamos el demonio más básico de dhcp para que al reiniciar
-# no nos quedemos sin internet
-pacman -S --noconfirm --needed dhcpcd
-systemctl enable dhcpcd
 
-
-# --- módulos de kernel necesarios ---------------------------------------------
+# --- MÓDULOS DEL KERNEL -------------------------------------------------------
 # agregamos el módulo i915 al kernel de Linux y lo volvemos a configurar
 # esto es para cargar KMS lo antes posible al inicio del boot
 # https://wiki.archlinux.org/index.php/Kernel_mode_setting_(Espa%C3%B1ol)
@@ -99,7 +133,29 @@ sed -i 's/loglevel=3 quiet/loglevel=4 nowatchdog i915.enable_guc=2/g' /etc/defau
 sed -i 's/GRUB_TIMEOUT=5/GRUB_TIMEOUT=2/g' /etc/default/grub
 grub-mkconfig -o /boot/grub/grub.cfg
 
-# --- FIN GESTOR DE ARRANQUE DEL SISTEMA ---------------------------------------
 
+# -- SSH -----------------------------------------------------------------------
+# instalamos, habilitamos y ejecutamos ssh para poder continuar con la
+# instalación desde otro pc de forma remota
+pacman -S --noconfirm --needed openssh
+systemctl enable sshd
+
+
+# -- SSD (optimizar y aumentar su vida) ----------------------------------------
+# To verify TRIM support, run:
+lsblk --discard
+# And check the values of DISC-GRAN (discard granularity) and DISC-MAX (discard
+# max bytes) columns. Non-zero values indicate TRIM support.
+systemctl enable fstrim.timer
+
+
+# -- FIRST BOOT NETWORK SERVICE ------------------------------------------------
+# instalamos y habilitamos el demonio más básico de dhcp para que al reiniciar
+# no nos quedemos sin internet
+pacman -S --noconfirm --needed dhcpcd
+systemctl enable dhcpcd
+
+
+# -- LIMPIEZA FINAL ------------------------------------------------------------
 # borramos este mismo script
 rm /opt/archiso-chroot.sh

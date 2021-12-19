@@ -20,44 +20,6 @@ USER=cosmo
 # source ~/.zshrc # para recargar el .zshrc sin reiniciar la shell
 
 
-# -- PACMAN --------------------------------------------------------------------
-# el mirrorlis ya está optimizado
-# https://wiki.archlinux.org/index.php/Mirrors_(Espa%C3%B1ol)#Lista_por_velocidad
-
-# -- editamos la configuración
-# sudo nvim /etc/pacman.conf
-# descomentar las siguientes lineas:
-# - en Misc options:
-#Color
-#VerbosePkgLists
-#ParallelDownloads = 3
-# - en los repositorios:
-#[multilib]
-#Include = /etc/pacman.d/mirrorlist
-
-sudo sed -i '/Color/s/^#//g' /etc/pacman.conf
-sudo sed -i '/VerbosePkgLists/s/^#//g' /etc/pacman.conf
-sudo sed -i '/^VerbosePkgLists/a ParallelDownloads = 5' /etc/pacman.conf
-
-sudo pacman -Syyu --noconfirm # actualizamos el sistema
-
-# -- agregamos el hook (trigger) para limpiar la cache de pacman
-# https://wiki.archlinux.org/index.php/Pacman_(Espa%C3%B1ol)#Limpiar_la_memoria_cach%C3%A9_de_los_paquetes
-sudo pacman -S --noconfirm --needed pacman-contrib
-sudo mkdir -p /etc/pacman.d/hooks/
-echo "[Trigger]
-Operation = Upgrade
-Operation = Install
-Operation = Remove
-Type = Package
-Target = *
-
-[Action]
-Description = Cleaning pacman cache...
-When = PostTransaction
-Exec = /usr/bin/paccache -r" >> /etc/pacman.d/hooks/remove_old_cache.hook
-
-
 # -- PILA GRÁFICA Y ESCRITORIO -------------------------------------------------
 # comprobación de la tarjeta gráfica
 # lspci | grep VGA
@@ -147,14 +109,6 @@ sudo pacman -S --noconfirm --needed bluez bluez-utils bluez-tools --needed
 # verificamos que el modulo btusb está cargado en el kernel
 lsmod | grep btusb
 sudo systemctl enable bluetooth
-
-
-# -- SSD (optimizar y aumentar su vida) ----------------------------------------
-# To verify TRIM support, run:
-lsblk --discard
-# And check the values of DISC-GRAN (discard granularity) and DISC-MAX (discard
-# max bytes) columns. Non-zero values indicate TRIM support.
-sudo systemctl enable fstrim.timer
 
 
 # --- INICIO DE COMANDOS EXCLUSIVOS PARA KOI -----------------------------------
