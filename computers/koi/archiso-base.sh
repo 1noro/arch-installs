@@ -65,6 +65,7 @@ lsblk
 # Server = http://ftp.rediris.es/mirror/archlinux/$repo/os/$arch
 sed -i '1 i\Server = http://mirror.librelabucm.org/archlinux/$repo/os/$arch' /etc/pacman.d/mirrorlist
 sed -i '1 i\Server = http://ftp.rediris.es/mirror/archlinux/$repo/os/$arch' /etc/pacman.d/mirrorlist
+sed -i '/ParallelDownloads = 5/s/^#//g' /etc/pacman.conf
 pacman -Syy # refrescamos los repositorios al cambiar el mirrorlist
 pacstrap /mnt base base-devel linux linux-firmware dosfstools exfat-utils btrfs-progs e2fsprogs ntfs-3g nfs-utils man-db man-pages texinfo sudo git neovim fish
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
