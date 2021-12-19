@@ -1,6 +1,5 @@
 #!/bin/bash
-# koi btrfs (GRUB) ARCHISO
-# LEER: https://wiki.archlinux.org/index.php/User:Altercation/Bullet_Proof_Arch_Install#Our_partition_plans
+# koi btrfs (GRUB) ARCHISO BASE
 
 set -e
 
@@ -18,7 +17,7 @@ fi
 HDD=$1
 
 # -- verificamos que entramos en modo UEFI
-ls -A /sys/firmware/efi/efivars || exit
+ls -A /sys/firmware/efi/efivars
 
 # -- activamos el servidor ntp para la hora
 timedatectl set-ntp true

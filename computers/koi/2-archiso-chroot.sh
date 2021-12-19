@@ -1,6 +1,5 @@
 #!/bin/bash
-# koi btrfs (GRUB) ARCHISO
-# LEER: https://wiki.archlinux.org/index.php/User:Altercation/Bullet_Proof_Arch_Install#Our_partition_plans
+# koi btrfs (GRUB) ARCHISO CHROOT
 
 set -e
 
