@@ -28,7 +28,10 @@ HOSTNAME="koi"
 
 sed -i '/Color/s/^#//g' /etc/pacman.conf
 sed -i '/VerbosePkgLists/s/^#//g' /etc/pacman.conf
-sed -i '/^VerbosePkgLists/a ParallelDownloads = 5' /etc/pacman.conf
+sed -i '/ParallelDownloads = 5/s/^#//g' /etc/pacman.conf
+# sed -i '/^VerbosePkgLists/a ParallelDownloads = 5' /etc/pacman.conf
+sed -i '/\[multilib\]/s/^#//g' /etc/pacman.conf
+sed -i '/Include = \/etc\/pacman\.d\/mirrorlist/s/^#//g' /etc/pacman.conf
 
 pacman -Syyu --noconfirm # actualizamos el sistema
 
@@ -159,3 +162,5 @@ systemctl enable dhcpcd
 # -- LIMPIEZA FINAL ------------------------------------------------------------
 # borramos este mismo script
 rm /opt/archiso-chroot.sh
+
+echo "## FIN ##"
