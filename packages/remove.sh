@@ -1,5 +1,6 @@
 #!/bin/bash
-packagelist_install=(
+
+packagelist=(
     polari # porque me dió un error en el journal (puede que sin importancia)
     epiphany # el navegador por defecto de gnome que no mola nada
     gnome-documents # no le veo la utildad
@@ -14,10 +15,10 @@ packagelist_install=(
     gnome-dictionary
     gnome-sound-recorder # audacity
     gnome-todo
-    gnome-usage # gnaome-system-monitor
+    gnome-usage # gnome-system-monitor lo substituye
 )
 
-pacman -Rns "${packagelist_install[@]}"
+pacman -Rns --noconfirm "${packagelist[@]}"
 # n: borra archivos de configuración
 
 # equivalente a apt autoremove:

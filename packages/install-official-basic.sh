@@ -1,8 +1,11 @@
 #!/bin/bash
-# (c) inoro [20200421a]
-# [install-from-repositories]
 
-packagelist_install=(
+if [[ $(id -u) -ne 0 ]]; then
+    echo "This script must be run as root"
+    exit 1
+fi
+
+packagelist=(
     ## utilidades básicas (no gráficas)
     linux-headers
     tree
@@ -157,4 +160,4 @@ packagelist_install=(
 )
 
 pacman -Syyu
-pacman -S --needed "${packagelist_install[@]}"
+pacman -S --needed --noconfirm "${packagelist[@]}"

@@ -1,9 +1,6 @@
 #!/bin/bash
 
-# intento de instalar los paquetes mencionados en la lista packages-extra.md
-
-# --- instalación desde los repositorios oficiales de Arch Linux
-packagelist_install=(
+packagelist=(
     ## Edtitores de código e IDEs
     # atom
     # hunspell-es_es # necesario para el paquete spell-check (https://atom.io/packages/spell-check)
@@ -86,7 +83,7 @@ packagelist_install=(
 )
 
 pacman -Syyu
-pacman -S --needed "${packagelist_install[@]}"
+pacman -S --needed --noconfirm "${packagelist[@]}"
 
 ## Comandos adicionales
 # VirtualBox

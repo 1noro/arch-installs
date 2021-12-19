@@ -1,25 +1,22 @@
 #!/bin/bash
 
-# intento de instalar los paquetes mencionados en la lista packages-extra.md
+set -e
 
-# --- instalar desde AUR
+if [[ $(id -u) -eq 0 ]]; then
+    echo "This script must be run as a non-root user"
+    exit 1
+fi
+
+CURRENT_DIR=$(pwd)
+AUR_DIR="/opt/aur"
+
+cd "$AUR_DIR"
+
+# -- INICIO DE LA INSTALACIÓN --------------------------------------------------
 ## Juegos
 # openrct2-git
 # git clone https://aur.archlinux.org/packages/openrct2-git && \
 # cd openrct2-git && \
-# makepkg -sri && \
-# cd ..
-
-## Cryptomonedas
-# dogecoin core
-# git clone https://aur.archlinux.org/dogecoin-qt.git && \
-# cd dogecoin-qt && \
-# makepkg -sri && \
-# cd ..
-
-# litecoin core
-# git clone https://aur.archlinux.org/litecoin-qt.git && \
-# cd litecoin-qt && \
 # makepkg -sri && \
 # cd ..
 
@@ -37,43 +34,35 @@ cd jdownloader2 && \
 makepkg -sri && \
 cd ..
 
-## Arreglar PCs
-# teamviewer
-# git clone https://aur.archlinux.org/teamviewer.git && \
-# cd teamviewer && \
-# makepkg -sri && \
-# sudo systemctl enable teamviewerd && \
-# cd ..
-
 ## VPNs
-# mullvad
-# hay que mirar el PKGBUILD y comprobar que claves se necesitan
-# PKGBUILD: https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=mullvad-vpn
-# dónde encontrar las claves: https://mullvad.net/en/help/open-source/
-# gía de mullvad para confiar en las claves: https://mullvad.net/en/help/verifying-signatures/
-# claves necesarias a dia 202004242239
-# EA0A77BF9E115615FC3BD8BC7653B940E494FE87 Linus Färnstrand (code signing key) <linus@mullvad.net>
-# 8339C7D2942EB854E3F27CE5AEE9DECFD582E984 David Lönnhager (code signing) <david.l@mullvad.net>
-# las descargo a mi pc:
-gpg2 --keyserver pool.sks-keyservers.net --recv-keys EA0A77BF9E115615FC3BD8BC7653B940E494FE87
-gpg2 --keyserver pool.sks-keyservers.net --recv-keys 8339C7D2942EB854E3F27CE5AEE9DECFD582E984
-# las edito:
-gpg2 --edit-key EA0A77BF9E115615FC3BD8BC7653B940E494FE87
-# > trust
-# > 5
-# > s
-# > q
-gpg2 --edit-key 8339C7D2942EB854E3F27CE5AEE9DECFD582E984
-# > trust
-# > 5
-# > s
-# > q
-# ya hora puedo instalar el paquete
-git clone https://aur.archlinux.org/mullvad-vpn.git && \
-cd mullvad-vpn && \
-makepkg -sri && \
-sudo systemctl enable mullvad-daemon && \
-cd ..
+# # mullvad
+# # hay que mirar el PKGBUILD y comprobar que claves se necesitan
+# # PKGBUILD: https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=mullvad-vpn
+# # dónde encontrar las claves: https://mullvad.net/en/help/open-source/
+# # gía de mullvad para confiar en las claves: https://mullvad.net/en/help/verifying-signatures/
+# # claves necesarias a dia 202004242239
+# # EA0A77BF9E115615FC3BD8BC7653B940E494FE87 Linus Färnstrand (code signing key) <linus@mullvad.net>
+# # 8339C7D2942EB854E3F27CE5AEE9DECFD582E984 David Lönnhager (code signing) <david.l@mullvad.net>
+# # las descargo a mi pc:
+# gpg2 --keyserver pool.sks-keyservers.net --recv-keys EA0A77BF9E115615FC3BD8BC7653B940E494FE87
+# gpg2 --keyserver pool.sks-keyservers.net --recv-keys 8339C7D2942EB854E3F27CE5AEE9DECFD582E984
+# # las edito:
+# gpg2 --edit-key EA0A77BF9E115615FC3BD8BC7653B940E494FE87
+# # > trust
+# # > 5
+# # > s
+# # > q
+# gpg2 --edit-key 8339C7D2942EB854E3F27CE5AEE9DECFD582E984
+# # > trust
+# # > 5
+# # > s
+# # > q
+# # ya hora puedo instalar el paquete
+# git clone https://aur.archlinux.org/mullvad-vpn.git && \
+# cd mullvad-vpn && \
+# makepkg -sri && \
+# sudo systemctl enable mullvad-daemon && \
+# cd ..
 
 ## Fuentes
 # iosevka (https://typeof.net/Iosevka/)
@@ -153,13 +142,6 @@ cd visual-studio-code-bin && \
 makepkg -sri && \
 cd ..
 
-## NewsFlash, The spiritual successor to FeedReader
-# newsflash-git
-# git clone https://aur.archlinux.org/newsflash-git.git && \
-# cd newsflash-git && \
-# makepkg -sri && \
-# cd ..
-
 ## Android Studio: The official Android IDE (Stable branch)
 # android-studio
 # git clone https://aur.archlinux.org/android-studio.git && \
@@ -172,13 +154,6 @@ cd ..
 ## INSTALA "Android SDK Command-line Tools" DESDE EL SDK MANAGER (interfaz gráfica)
 ## export JAVA_HOME=/opt/android-studio/jre/
 ## yes | ~/Android/Sdk/tools/bin/sdkmanager --licenses
-
-## Godot
-# godot
-# git clone https://aur.archlinux.org/godot.git && \
-# cd godot && \
-# makepkg -sri && \
-# cd ..
 
 ## mahjong (https://mahjong.julianbradfield.org/)
 # mahjong
@@ -198,11 +173,11 @@ cd ..
 ## rdfind (https://rdfind.pauldreik.se/)
 # Redundant data find - a program that finds duplicate files.
 # rdfind
-git clone https://aur.archlinux.org/rdfind.git && \
-gpg --keyserver keyserver.ubuntu.com --search-keys 5C4A26CD4CC8C397 \
-cd rdfind && \
-makepkg -sri && \
-cd ..
+# git clone https://aur.archlinux.org/rdfind.git && \
+# gpg --keyserver keyserver.ubuntu.com --search-keys 5C4A26CD4CC8C397 \
+# cd rdfind && \
+# makepkg -sri && \
+# cd ..
 
 ## lyrebird (https://github.com/lyrebird-voice-changer/lyrebird)
 # Simple and powerful voice changer for Linux, written in GTK 3
@@ -215,7 +190,11 @@ cd ..
 ## cgoban3 (https://gokgs.com)
 # A KGS client and SGF editor (edit Go scenarios)
 # cgoban3
-git clone https://aur.archlinux.org/cgoban3.git && \
-cd cgoban3 && \
-makepkg -sri && \
-cd ..
+# git clone https://aur.archlinux.org/cgoban3.git && \
+# cd cgoban3 && \
+# makepkg -sri && \
+# cd ..
+
+# -- FIN DE LA INSTALACIÓN -----------------------------------------------------
+
+cd "$CURRENT_DIR"
