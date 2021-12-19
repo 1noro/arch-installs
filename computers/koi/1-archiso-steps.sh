@@ -2,6 +2,8 @@
 # koi btrfs (GRUB) ARCHISO manual steps
 # LEER: https://wiki.archlinux.org/index.php/User:Altercation/Bullet_Proof_Arch_Install#Our_partition_plans
 
+set -e
+
 # -- comprobaciones iniciales --------------------------------------------------
 # comprobación de red DHCP (por cable)
 ping archlinux.org

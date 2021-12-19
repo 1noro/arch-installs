@@ -4,7 +4,7 @@
 set -e
 
 if [[ $(id -u) -ne 0 ]]; then
-    echo "This script must be run as root" 
+    echo "This script must be run as root"
     exit 1
 fi
 
@@ -62,7 +62,8 @@ echo "$HOSTNAME" > /etc/hostname
 pacman -S --noconfirm --needed dhcpcd
 systemctl enable dhcpcd
 
-# --- módulos de kernel necesarios
+
+# --- módulos de kernel necesarios ---------------------------------------------
 # agregamos el módulo i915 al kernel de Linux y lo volvemos a configurar
 # esto es para cargar KMS lo antes posible al inicio del boot
 # https://wiki.archlinux.org/index.php/Kernel_mode_setting_(Espa%C3%B1ol)
@@ -76,37 +77,8 @@ sed -i 's/MODULES=()/MODULES=(i915)/g' /etc/mkinitcpio.conf
 mkinitcpio -p linux
 # comprobar aquí si falta algún módulo por cargar para este hardware específico
 
-# --- INICIO DE COMANDOS EXCLUSIVOS PARA KOI -----------------------------------
-# (https://gist.github.com/imrvelj/c65cd5ca7f5505a65e59204f5a3f7a6d)
-# solución para los warnings:
-# ==> WARNING: Possibly missing firmware for module: aic94xx
-# ==> WARNING: Possibly missing firmware for module: wd719x
-su "$USER" -c "mkdir -p ~/Work/aur"
 
-su "$USER" -c "cd ~/Work/aur && \
-    git clone https://aur.archlinux.org/aic94xx-firmware.git && \
-    cd aic94xx-firmware && \
-    makepkg -sri --noconfirm"
-
-su "$USER" -c "cd ~/Work/aur && \
-    git clone https://aur.archlinux.org/wd719x-firmware.git && \
-    cd wd719x-firmware && \
-    makepkg -sri --noconfirm"
-
-# según los foros esto no es necesario, pero a mi me funciona para quitar el 
-# WARNING al recompilar los módulos dinámicos del nucleo.
-# ==> WARNING: Possibly missing firmware for module: xhci_pci
-su "$USER" -c "cd ~/Work/aur && \
-    git clone https://aur.archlinux.org/upd72020x-fw.git && \
-    cd upd72020x-fw && \
-    makepkg -sri --noconfirm"
-
-mkinitcpio -p linux # volvemos a generar el initramfs en /boot
-
-# --- FINAL DE COMANDOS EXCLUSIVOS PARA KOI ------------------------------------
-
-# --- GESTOR DE ARRANQUE DEL SISTEMA -------------------------------------------
-
+# -- GESTOR DE ARRANQUE DEL SISTEMA --------------------------------------------
 # instalamos y habilitamos las actualizacionse tempranas de microcodigo
 # para procesadores intel
 pacman -S --noconfirm --needed intel-ucode
@@ -128,3 +100,6 @@ sed -i 's/GRUB_TIMEOUT=5/GRUB_TIMEOUT=2/g' /etc/default/grub
 grub-mkconfig -o /boot/grub/grub.cfg
 
 # --- FIN GESTOR DE ARRANQUE DEL SISTEMA ---------------------------------------
+
+# borramos este mismo script
+rm /opt/archiso-chroot.sh

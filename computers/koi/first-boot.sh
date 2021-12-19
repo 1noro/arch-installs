@@ -1,1 +1,195 @@
 #!/bin/bash
+
+set -e
+
+if [[ $(id -u) -eq 0 ]]; then
+    echo "This script must be run as a non-root user"
+    exit 1
+fi
+
+USER=cosmo
+
+# -- DOTFILES ------------------------------------------------------------------
+# (EL SCRIPT DEPLOY AÚN NO ESTÁ FUNCIONANDO, es mas, nada funciona)
+# mkdir -p ~/Work/github
+# cd ~/Work/github
+# git clone https://github.com/1noro/dotfiles.git; \
+# cd dotfiles; \
+# bash deploy.sh; \
+# cd; \
+# source ~/.zshrc # para recargar el .zshrc sin reiniciar la shell
+
+
+# -- PACMAN --------------------------------------------------------------------
+# el mirrorlis ya está optimizado
+# https://wiki.archlinux.org/index.php/Mirrors_(Espa%C3%B1ol)#Lista_por_velocidad
+
+# -- editamos la configuración
+# sudo nvim /etc/pacman.conf
+# descomentar las siguientes lineas:
+# - en Misc options:
+#Color
+#VerbosePkgLists
+#ParallelDownloads = 3
+# - en los repositorios:
+#[multilib]
+#Include = /etc/pacman.d/mirrorlist
+
+sudo sed -i '/Color/s/^#//g' /etc/pacman.conf
+sudo sed -i '/VerbosePkgLists/s/^#//g' /etc/pacman.conf
+sudo sed -i '/^VerbosePkgLists/a ParallelDownloads = 5' /etc/pacman.conf
+
+sudo pacman -Syyu --noconfirm # actualizamos el sistema
+
+# -- agregamos el hook (trigger) para limpiar la cache de pacman
+# https://wiki.archlinux.org/index.php/Pacman_(Espa%C3%B1ol)#Limpiar_la_memoria_cach%C3%A9_de_los_paquetes
+sudo pacman -S --noconfirm --needed pacman-contrib
+sudo mkdir -p /etc/pacman.d/hooks/
+echo "[Trigger]
+Operation = Upgrade
+Operation = Install
+Operation = Remove
+Type = Package
+Target = *
+
+[Action]
+Description = Cleaning pacman cache...
+When = PostTransaction
+Exec = /usr/bin/paccache -r" >> /etc/pacman.d/hooks/remove_old_cache.hook
+
+
+# -- PILA GRÁFICA Y ESCRITORIO -------------------------------------------------
+# comprobación de la tarjeta gráfica
+# lspci | grep VGA
+
+# > FOR VIRTUALBOX GUESTS READ:
+# https://wiki.archlinux.org/index.php/VirtualBox/Install_Arch_Linux_as_a_guest
+# https://wiki.archlinux.org/index.php/VirtualBox#Set_guest_starting_resolution
+# esencaialmente solo hay que substitur la instalacíon de xf86-video-intel por estos dos comandos
+# sudo pacman -S --noconfirm --needed virtualbox-guest-utils
+# sudo systemctl enable vboxservice.service
+
+# driver de la tarjeta grafica
+sudo pacman -S --noconfirm --needed xf86-video-intel
+# instalar OpenGl y OpenGl 32 (para Steam, por ejemplo)
+sudo pacman -S --noconfirm --needed mesa lib32-mesa --needed
+
+# -- inicio pipewire --
+# instalamos pipewire y sus dependencias
+sudo pacman -S --noconfirm --needed pipewire \
+    lib32-pipewire \
+    pipewire-docs \
+    pipewire-alsa \
+    pipewire-pulse \
+    pipewire-jack \
+    lib32-pipewire-jack \
+    gst-plugin-pipewire \
+    pavucontrol 
+# PARECE QUE ESTE PAQUERTE NO HACE FALTA:
+# cd ~/Work/aur; \
+# git clone https://aur.archlinux.org/pipewire-dropin.git; \
+# cd pipewire-dropin; \
+# makepkg -sri; \
+# cd ~
+# comprobaciones para realizar después: https://wiki.archlinux.org/title/PipeWire
+# comando util por si trajeta USB no funciona:
+# systemctl --user restart pipewire.service
+# info sobre jack: https://github.com/jackaudio/jackaudio.github.com/wiki/Q_difference_jack1_jack2
+# -- final pipewire --
+
+# instalamos gnome y sus extras
+sudo pacman -S --noconfirm --needed gdm \
+    gnome \
+    gnome-extra \
+    xdg-desktop-portal \
+    xdg-desktop-portal-gtk \
+    gnu-free-fonts \
+    noto-fonts-emoji \
+    firefox
+# gdm ya está en el grupo gnome, pero lo escribo para que quede patente
+# especifico xdg-desktop-portal-gtk para no tener que leer la wiki siempre
+# TODO: revisar las diferencias entre xdg-desktop-portal-gtk y 
+# xdg-desktop-portal-kde
+
+# habilitamos gdm para que se inicie solo
+sudo systemctl enable gdm
+
+
+# -- default MIME types --------------------------------------------------------
+# para que funcione la opción ver en carpeta de los programas como firefox, etc
+# (resumiendo: permitir a firefox que pueda abrir nautilus cuando quieres ver tus descargas en su carpeta)
+# xdg-mime default org.gnome.Nautilus.desktop inode/directory
+# (parece que ya no hace falta)
+
+
+# -- NetworkManager ------------------------------------------------------------
+# instalamos NetworkManager para poder gestionar la red desde gnome
+sudo pacman -S --noconfirm --needed wpa_supplicant \
+    wireless_tools \
+    networkmanager \
+    network-manager-applet \
+    gnome-keyring
+
+# systemctl --type=service # (comprobación)
+sudo systemctl stop dhcpcd
+sudo systemctl disable dhcpcd
+sudo pacman -Rns dhcpcd
+
+sudo systemctl enable wpa_supplicant
+sudo systemctl enable NetworkManager
+
+# add user to network group
+sudo gpasswd -a "$USER" network
+
+
+# -- Bluetooth -----------------------------------------------------------------
+sudo pacman -S --noconfirm --needed bluez bluez-utils bluez-tools --needed
+# verificamos que el modulo btusb está cargado en el kernel
+lsmod | grep btusb
+sudo systemctl enable bluetooth
+
+
+# -- SSD (optimizar y aumentar su vida) ----------------------------------------
+# To verify TRIM support, run:
+lsblk --discard
+# And check the values of DISC-GRAN (discard granularity) and DISC-MAX (discard
+# max bytes) columns. Non-zero values indicate TRIM support.
+sudo systemctl enable fstrim.timer
+
+
+# --- INICIO DE COMANDOS EXCLUSIVOS PARA KOI -----------------------------------
+sudo mkdir -p /opt/aur
+sudo chown cosmo:cosmo /opt/aur
+cd /opt/aur
+
+# (https://gist.github.com/imrvelj/c65cd5ca7f5505a65e59204f5a3f7a6d)
+# solución para los warnings:
+# ==> WARNING: Possibly missing firmware for module: aic94xx
+# ==> WARNING: Possibly missing firmware for module: wd719x
+git clone https://aur.archlinux.org/aic94xx-firmware.git && \
+cd aic94xx-firmware && \
+makepkg -sri --noconfirm
+
+git clone https://aur.archlinux.org/wd719x-firmware.git && \
+cd wd719x-firmware && \
+makepkg -sri --noconfirm
+
+# según los foros esto no es necesario, pero a mi me funciona para quitar el 
+# WARNING al recompilar los módulos dinámicos del nucleo.
+# ==> WARNING: Possibly missing firmware for module: xhci_pci
+git clone https://aur.archlinux.org/upd72020x-fw.git && \
+cd upd72020x-fw && \
+makepkg -sri --noconfirm
+
+cd "$HOME"
+
+mkinitcpio -p linux # volvemos a generar el initramfs en /boot
+# --- FINAL DE COMANDOS EXCLUSIVOS PARA KOI ------------------------------------
+
+
+# -- primera snapshot en btrfs -------------------------------------------------
+sudo pacman -S --noconfirm --needed snapper
+sudo snapper -c root create-config /; \
+sudo snapper -c root create -d "primera"; \
+sudo snapper -c home create-config /home; \
+sudo snapper -c home create -d "primera"
