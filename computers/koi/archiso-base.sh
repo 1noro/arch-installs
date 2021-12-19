@@ -56,16 +56,17 @@ mkdir /mnt/boot
 mount LABEL=EFI /mnt/boot
 lsblk
 
-# -- instalamos el sistema base en el disco particionado (pensar en que
-# paquetes son necesarios aquí desde el principio)
-# nano /etc/pacman.d/mirrorlist
+# -- instalacion del sistema base ----------------------------------------------
+# instalamos el sistema base en el disco particionado (pensar en que paquetes 
+# son necesarios aquí desde el principio)
+# nvim /etc/pacman.d/mirrorlist
 # agregar al principio de todo las lineas:
 # Server = http://mirror.librelabucm.org/archlinux/$repo/os/$arch
 # Server = http://ftp.rediris.es/mirror/archlinux/$repo/os/$arch
 sed -i '1 i\Server = http://mirror.librelabucm.org/archlinux/$repo/os/$arch' /etc/pacman.d/mirrorlist
 sed -i '1 i\Server = http://ftp.rediris.es/mirror/archlinux/$repo/os/$arch' /etc/pacman.d/mirrorlist
 pacman -Syy # refrescamos los repositorios al cambiar el mirrorlist
-pacstrap /mnt base base-devel linux linux-firmware dosfstools exfat-utils btrfs-progs e2fsprogs ntfs-3g man-db man-pages texinfo sudo git neovim fish
+pacstrap /mnt base base-devel linux linux-firmware dosfstools exfat-utils btrfs-progs e2fsprogs ntfs-3g nfs-utils man-db man-pages texinfo sudo git neovim fish
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
 
 # - este mensaje es completamente normal mientras no generemos los locales
@@ -81,3 +82,7 @@ cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
 # -- generamos el fstab tal cual como lo tenemos montado en la instalación
 # genfstab -U /mnt > /mnt/etc/fstab # Use UUIDs for source identifiers
 genfstab -L /mnt > /mnt/etc/fstab # Use labels for source identifiers
+
+# -- fin de la instalación base ------------------------------------------------
+# -- copiamos el siguiente script a la carpeta correspondiente
+cp arch-installs/computers/koi/archiso-chroot.sh /mnt/opt/

@@ -48,11 +48,10 @@ pacman -Syy && pacman -S --noconfirm --needed git
 git clone https://github.com/1noro/arch-installs.git
 
 # script base
-bash arch-installs/computers/koi/1-archiso-base.sh /dev/sda
+bash arch-installs/computers/koi/archiso-base.sh /dev/sda
 
 # script chroot
-cp arch-installs/computers/koi/2-archiso-chroot.sh /mnt/tmp/
-arch-chroot /mnt bash /tmp/2-archiso-chroot.sh
+arch-chroot /mnt bash /opt/archiso-chroot.sh
 
 # -- pasos finales -------------------------------------------------------------
 # desmontamos con seguridad el entorno de instalación

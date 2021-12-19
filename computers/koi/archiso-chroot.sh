@@ -38,18 +38,18 @@ ln -sf /usr/share/zoneinfo/Europe/Madrid /etc/localtime
 hwclock --systohc
 
 # configuramos el idioma por defecto del equipo
-# nano /etc/locale.gen
+# nvim /etc/locale.gen
 # descomentamos:
 # en_US.UTF-8 UTF-8
 # es_ES.UTF-8 UTF-8
 sed -i 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/g' /etc/locale.gen
 sed -i '/es_ES.UTF-8 UTF-8/s/^#//g' /etc/locale.gen
 locale-gen
-echo 'LANG=es_ES.UTF-8' > /etc/locale.conf
+echo "LANG=es_ES.UTF-8" > /etc/locale.conf
 
 # ponemos nombre al equipo
 echo "$HOSTNAME" > /etc/hostname
-# nano /etc/hosts
+# nvim /etc/hosts
 # - agregar las siguientes lineas
 {
     echo "127.0.0.1	localhost"
@@ -70,7 +70,7 @@ systemctl enable dhcpcd
 # *Corrección: esto es para que el módulo de los gráficos de intel (i915) se 
 # incorpore al initramfs para que se cargue con el primer arranque del kernel.
 # Y se compile automáticamente al actualizar el kernel con pacaman.
-# nano /etc/mkinitcpio.conf
+# nvim /etc/mkinitcpio.conf
 # modificar la linea MODULES=() --> MODULES=(i915)
 sed -i 's/MODULES=()/MODULES=(i915)/g' /etc/mkinitcpio.conf
 mkinitcpio -p linux
@@ -81,25 +81,25 @@ mkinitcpio -p linux
 # solución para los warnings:
 # ==> WARNING: Possibly missing firmware for module: aic94xx
 # ==> WARNING: Possibly missing firmware for module: wd719x
-su "$USER" -c 'mkdir -p ~/Work/aur'
+su "$USER" -c "mkdir -p ~/Work/aur"
 
-su "$USER" -c 'cd ~/Work/aur && \
+su "$USER" -c "cd ~/Work/aur && \
     git clone https://aur.archlinux.org/aic94xx-firmware.git && \
     cd aic94xx-firmware && \
-    makepkg -sri'
+    makepkg -sri --noconfirm"
 
-su "$USER" -c 'cd ~/Work/aur && \
+su "$USER" -c "cd ~/Work/aur && \
     git clone https://aur.archlinux.org/wd719x-firmware.git && \
     cd wd719x-firmware && \
-    makepkg -sri'
+    makepkg -sri --noconfirm"
 
 # según los foros esto no es necesario, pero a mi me funciona para quitar el 
 # WARNING al recompilar los módulos dinámicos del nucleo.
 # ==> WARNING: Possibly missing firmware for module: xhci_pci
-su "$USER" -c 'cd ~/Work/aur && \
+su "$USER" -c "cd ~/Work/aur && \
     git clone https://aur.archlinux.org/upd72020x-fw.git && \
     cd upd72020x-fw && \
-    makepkg -sri'
+    makepkg -sri --noconfirm"
 
 mkinitcpio -p linux # volvemos a generar el initramfs en /boot
 
@@ -118,7 +118,7 @@ grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
 # https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html
 # https://wiki.archlinux.org/index.php/Improving_performance#Watchdogs
 # https://wiki.archlinux.org/index.php/Intel_graphics#Enable_early_KMS
-# nano /etc/default/grub
+# nvim /etc/default/grub
 # editando la linea GRUB_CMDLINE_LINUX_DEFAULT para dejarla así:
 # GRUB_CMDLINE_LINUX_DEFAULT="loglevel=4 nowatchdog i915.enable_guc=2"
 sed -i 's/loglevel=3 quiet/loglevel=4 nowatchdog i915.enable_guc=2/g' /etc/default/grub
