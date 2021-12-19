@@ -46,7 +46,7 @@ fdisk /dev/sda
 lsblk
 
 # -- ejecución de scripts ------------------------------------------------------
-pacman -Syy && pacman -S --noconfirm --needed git
+pacman -Syy && pacman -S --noconfirm --needed git && \
 git clone https://github.com/1noro/arch-installs.git
 
 # script base
