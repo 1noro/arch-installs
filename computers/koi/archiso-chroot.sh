@@ -53,12 +53,12 @@ Exec = /usr/bin/paccache -r" >> /etc/pacman.d/hooks/remove_old_cache.hook
 
 # -- USUARIOS ------------------------------------------------------------------
 # asignamos una contrseña a root
-echo "## Contraseña para root"
+echo -e "## Contraseña para \[\e[36m\]root\[\e[m\]"
 passwd
 
 # creamos y configuramos un nuevo usuario para podrer instalar paquetes desde AUR
 useradd -s /bin/fish -m "$USER" # considerar quitar la opción -m (create_home)
-echo "## Contraseña para $USER"
+echo "## Contraseña para \[\e[36m\]$USER\[\e[m\]"
 passwd "$USER"
 # usermod -a -G sudo "$USER"
 # --- inicio sudo manual ---

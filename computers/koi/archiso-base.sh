@@ -86,3 +86,5 @@ genfstab -L /mnt > /mnt/etc/fstab # Use labels for source identifiers
 # -- fin de la instalación base ------------------------------------------------
 # -- copiamos el siguiente script a la carpeta correspondiente
 cp arch-installs/computers/koi/archiso-chroot.sh /mnt/opt/
+
+echo "## FIN ##"

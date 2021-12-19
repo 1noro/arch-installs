@@ -147,3 +147,7 @@ sudo snapper -c root create-config /; \
 sudo snapper -c root create -d "primera"; \
 sudo snapper -c home create-config /home; \
 sudo snapper -c home create -d "primera"
+
+
+## -- FINALIZACIÓN -------------------------------------------------------------
+echo "## FIN ##"
