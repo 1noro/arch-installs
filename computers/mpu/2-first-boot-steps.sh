@@ -20,7 +20,7 @@ sudo grub-mkconfig -o /boot/grub/grub.cfg
 # instalamos los paquetes habituales
 sudo bash arch-installs/packages/install-official-basic.sh
 sudo bash arch-installs/packages/install-official-extra.sh
-sudo bash arch-installs/packages/install-aur.sh
+bash arch-installs/packages/install-aur.sh
 sudo bash arch-installs/packages/remove.sh
 
 # borramos este repositorio

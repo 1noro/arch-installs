@@ -80,7 +80,7 @@ packagelist=(
     ## Editores de texto
     # libreoffice-fresh
     nano
-    nvim
+    neovim
     xclip # for X11 clipboard in nvim
     #wl-copy # for WYLAND clipboard in nvim
     

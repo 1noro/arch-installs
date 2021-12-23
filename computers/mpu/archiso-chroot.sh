@@ -32,7 +32,8 @@ sed -i '/ParallelDownloads = 5/s/^#//g' /etc/pacman.conf
 
 sed -i '/\[multilib\]/s/^#//g' /etc/pacman.conf
 # Include = /etc/pacman.d/mirrorlist
-sed -i '/^#\[multilib]/{N;s/\n#/\n/}' /etc/pacman.conf
+# sed -i '/^#\[multilib]/{N;s/\n#/\n/}' /etc/pacman.conf
+# !!!!esto no está funcionando
 
 pacman -Syyu --noconfirm # actualizamos el sistema
 
@@ -123,7 +124,7 @@ pacman -S --noconfirm --needed intel-ucode
 
 # -- instalación y configuración inicial de GRUB
 pacman -S --noconfirm --needed grub efibootmgr
-grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
+grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB --removable
 # https://wiki.archlinux.org/index.php/Kernel_parameters_(Espa%C3%B1ol)
 # https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html
 # https://wiki.archlinux.org/index.php/Improving_performance#Watchdogs
@@ -142,6 +143,10 @@ grub-mkconfig -o /boot/grub/grub.cfg
 # instalamos, habilitamos y ejecutamos ssh para poder continuar con la
 # instalación desde otro pc de forma remota
 pacman -S --noconfirm --needed openssh
+# !!!!esto esta fallando:
+# (2/4) Creating temporary files...
+# Failed to open file "/sys/devices/system/cpu/microcode/reload": Read-only file system
+# error: command failed to execute correctly
 systemctl enable sshd
 
 
@@ -157,6 +162,10 @@ systemctl enable fstrim.timer
 # instalamos y habilitamos el demonio más básico de dhcp para que al reiniciar
 # no nos quedemos sin internet
 pacman -S --noconfirm --needed dhcpcd
+# !!!!esto esta fallando:
+# (2/4) Creating temporary files...
+# Failed to open file "/sys/devices/system/cpu/microcode/reload": Read-only file system
+# error: command failed to execute correctly
 systemctl enable dhcpcd
 
 

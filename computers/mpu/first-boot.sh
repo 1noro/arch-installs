@@ -7,7 +7,7 @@ if [[ $(id -u) -eq 0 ]]; then
     exit 1
 fi
 
-USER=cosmo
+USER="cosmo"
 
 # -- DOTFILES ------------------------------------------------------------------
 # (EL SCRIPT DEPLOY AÚN NO ESTÁ FUNCIONANDO, es mas, nada funciona)
@@ -46,7 +46,7 @@ sudo pacman -S --noconfirm --needed pipewire \
     pipewire-jack \
     lib32-pipewire-jack \
     gst-plugin-pipewire \
-    pavucontrol 
+    pavucontrol
 # PARECE QUE ESTE PAQUERTE NO HACE FALTA:
 # cd ~/Work/aur; \
 # git clone https://aur.archlinux.org/pipewire-dropin.git; \
@@ -63,6 +63,7 @@ sudo pacman -S --noconfirm --needed pipewire \
 sudo pacman -S --noconfirm --needed gdm \
     gnome \
     gnome-extra \
+    gnome-themes-extra \
     xdg-desktop-portal \
     xdg-desktop-portal-gtk \
     gnu-free-fonts \
@@ -95,7 +96,7 @@ sudo pacman -S --noconfirm --needed wpa_supplicant \
 # systemctl --type=service # (comprobación)
 sudo systemctl stop dhcpcd
 sudo systemctl disable dhcpcd
-sudo pacman -Rns dhcpcd
+sudo pacman -Rns --noconfirm dhcpcd
 
 sudo systemctl enable wpa_supplicant
 sudo systemctl enable NetworkManager
@@ -137,15 +138,16 @@ makepkg -sri --noconfirm
 
 cd "$HOME"
 
-mkinitcpio -p linux # volvemos a generar el initramfs en /boot
+sudo mkinitcpio -p linux # volvemos a generar el initramfs en /boot
 # --- FINAL DE COMANDOS EXCLUSIVOS PARA MPU ------------------------------------
 
 
 # -- primera snapshot en btrfs -------------------------------------------------
 sudo pacman -S --noconfirm --needed snapper
-sudo snapper -c root create-config /; \
-sudo snapper -c root create -d "primera"; \
-sudo snapper -c home create-config /home; \
+
+sudo snapper -c root create-config / && \
+sudo snapper -c root create -d "primera" && \
+sudo snapper -c home create-config /home && \
 sudo snapper -c home create -d "primera"
 
 

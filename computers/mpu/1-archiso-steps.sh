@@ -25,12 +25,12 @@ lsblk
 # https://wiki.archlinux.org/index.php/EFI_system_partition#GPT_partitioned_disks
 # https://gtronick.github.io/ALIG/
 # NAME            SIZE  TYPE                    MOUNTPOINT
-# sda           223,6G  disk
-#   sda1        512,0M  part EFI System (ESP)   /boot
-#   sda2         16,0G  part                    [SWAP]
-#   sda3        207,1G  part                    [BTRFS VOLUMES]
+# nvme0n1       223,6G  disk
+#   p1          512,0M  part EFI System (ESP)   /boot
+#   p2           16,0G  part                    [SWAP]
+#   p3          207,1G  part                    [BTRFS VOLUMES]
 
-fdisk /dev/sda
+fdisk /dev/nvme0n1
 # comandos de fdisk:
 # m (listamos la ayuda)
 # g (generamos una tabla GPT)
@@ -50,7 +50,7 @@ pacman -Syy && pacman -S --noconfirm --needed git && \
 git clone https://github.com/1noro/arch-installs.git
 
 # script base
-bash arch-installs/computers/mpu/archiso-base.sh /dev/sda
+bash arch-installs/computers/mpu/archiso-base.sh /dev/nvme0n1p
 
 # script chroot
 arch-chroot /mnt bash /opt/archiso-chroot.sh

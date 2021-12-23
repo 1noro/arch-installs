@@ -12,7 +12,6 @@ packagelist=(
     accerciser
     devhelp
     glade
-    gnome-dictionary
     gnome-sound-recorder # audacity
     gnome-todo
     gnome-usage # gnome-system-monitor lo substituye
