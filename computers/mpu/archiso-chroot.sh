@@ -132,7 +132,7 @@ grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB --re
 # nvim /etc/default/grub
 # editando la linea GRUB_CMDLINE_LINUX_DEFAULT para dejarla así:
 # GRUB_CMDLINE_LINUX_DEFAULT="loglevel=4 nowatchdog i915.enable_guc=2"
-sed -i 's/loglevel=3 quiet/loglevel=4 nowatchdog i915.enable_guc=2/g' /etc/default/grub
+sed -i 's/loglevel=3 quiet/loglevel=4 nowatchdog i915.enable_guc=2 snd_hda_codec_hdmi.enable_silent_stream=0/g' /etc/default/grub
 # de paso, también reducimos el tiempo de espera en la pantalla de grub
 # GRUB_TIMEOUT=2
 sed -i 's/GRUB_TIMEOUT=5/GRUB_TIMEOUT=2/g' /etc/default/grub
