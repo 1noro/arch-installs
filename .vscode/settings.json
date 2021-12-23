@@ -1,6 +1,7 @@
 {
     "conventionalCommits.scopes": [
         "koi",
-        "packages"
+        "packages",
+        "mpu"
     ]
 }
