@@ -33,8 +33,16 @@ USER="cosmo"
 
 # driver de la tarjeta grafica
 sudo pacman -S --noconfirm --needed xf86-video-intel
-# instalar OpenGl y OpenGl 32 (para Steam, por ejemplo)
-sudo pacman -S --noconfirm --needed mesa lib32-mesa --needed
+# instalar OpenGl y OpenGl 32 (para Steam, por ejemplo) los paquetes -utils 
+# pueden no ser necesarios, pero ofrecen algunas utilidades para verificar el 
+# correcto funcionamiento de la pila gráfica
+sudo pacman -S --noconfirm --needed mesa lib32-mesa mesa-utils lib32-mesa-utils
+# instalamos los paquietes de Vulkan para poder ejecutar Proton con Steam
+sudo pacman -S --noconfirm --needed vulkan-icd-loader \
+    lib32-vulkan-icd-loader \
+    vulkan-tools
+# Instalamos el driver específico de Intel para Vulkan
+sudo pacman -S --noconfirm --needed vulkan-intel lib32-vulkan-intel
 
 # -- inicio pipewire --
 # instalamos pipewire y sus dependencias
