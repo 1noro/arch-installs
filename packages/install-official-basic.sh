@@ -94,6 +94,12 @@ packagelist=(
     # ¿nm-connection-editor? # (debian) gir1.2-nm-1.0
     clutter # (debian) gir1.2-clutter-1.0
 
+    # mail
+    claws-mail
+    # claws-themes
+    aspell-en # diccionario EN para claws-mail
+    aspell-es # diccionario ES para claws-mail
+
     ## reproductores de vídeo y audio
     # vlc
     mpv
