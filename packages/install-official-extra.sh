@@ -88,8 +88,10 @@ pacman -S --needed --noconfirm "${packagelist[@]}"
 ## Comandos adicionales
 # VirtualBox
 usermod -a -G vboxusers $USER
-systemctl enable --now org.cups.cupsd.service
 systemctl enable --now avahi-daemon.service
 
 # Rust
 rustup default stable
+
+# cups
+systemctl enable --now cups
