@@ -22,6 +22,7 @@ packagelist=(
     unrar
     sl # para cuando te equivoques con 'ls'
     cmatrix # cool
+    figlet # ascii art
     # - shells
     fish
     # - entorno C
