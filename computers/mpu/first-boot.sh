@@ -74,6 +74,7 @@ sudo pacman -S --noconfirm --needed gdm \
     gnome-themes-extra \
     xdg-desktop-portal \
     xdg-desktop-portal-gtk \
+    xdg-desktop-portal-gnome \
     gnu-free-fonts \
     noto-fonts-emoji \
     firefox
