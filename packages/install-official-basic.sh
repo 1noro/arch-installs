@@ -45,6 +45,7 @@ packagelist=(
     aircrack-ng
     wireless_tools
     macchanger
+    rsync
 
     ## utilidades básicas (gráficas)
     firefox
