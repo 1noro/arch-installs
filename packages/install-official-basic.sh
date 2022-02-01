@@ -106,6 +106,7 @@ packagelist=(
     # vlc
     mpv
     rhythmbox
+    gst-libav # extra codecs
     # cmus # rhythmbox en la terminal
 
     ## cliente bittorrent
