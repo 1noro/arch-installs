@@ -107,6 +107,8 @@ packagelist=(
     mpv
     rhythmbox
     gst-libav # extra codecs
+    beets # music library manager
+    python-requests # beets deps
     # cmus # rhythmbox en la terminal
 
     ## cliente bittorrent
