@@ -8,6 +8,7 @@ fi
 packagelist=(
     ## utilidades básicas (no gráficas)
     linux-headers
+    base-devel
     tree
     fzf # de lo mejorcito
     exa # ls mejorado
@@ -27,6 +28,7 @@ packagelist=(
     fish
     # - entorno C
     gcc
+    glibc
     make
     # - entorno Java
     jdk-openjdk # last java
