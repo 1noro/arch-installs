@@ -41,6 +41,7 @@ packagelist=(
     dnsutils
     nmap
     iperf3
+    traceroute
     inetutils # telnet y mas...
     nut # Network UPS (SAI) Tools (config: https://wiki.archlinux.org/index.php/Network_UPS_Tools)
     sshfs # montar carpetas a traves de ssh
