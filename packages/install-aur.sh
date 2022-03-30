@@ -202,6 +202,15 @@ cd ..
 # makepkg -sri --noconfirm && \
 # cd ..
 
+
+## Apostrophe (https://apps.gnome.org/es/app/org.gnome.gitlab.somas.Apostrophe/)
+# Edit Markdown in style
+# apostrophe
+git clone https://aur.archlinux.org/apostrophe.git && \
+cd apostrophe && \
+makepkg -sri --noconfirm && \
+cd ..
+
 # -- FIN DE LA INSTALACIÓN -----------------------------------------------------
 
 cd "$CURRENT_DIR"
