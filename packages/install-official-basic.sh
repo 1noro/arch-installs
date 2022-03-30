@@ -108,7 +108,7 @@ packagelist=(
     ## reproductores de vídeo y audio
     # vlc
     mpv
-    rhythmbox
+    # rhythmbox
     gst-libav # extra codecs
     beets # music library manager
     python-requests # beets deps
