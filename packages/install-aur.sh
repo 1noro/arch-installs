@@ -202,12 +202,21 @@ cd ..
 # makepkg -sri --noconfirm && \
 # cd ..
 
+# GNOME GTK4 LIBADWAITA
 
 ## Apostrophe (https://apps.gnome.org/es/app/org.gnome.gitlab.somas.Apostrophe/)
 # Edit Markdown in style
 # apostrophe
 git clone https://aur.archlinux.org/apostrophe.git && \
 cd apostrophe && \
+makepkg -sri --noconfirm && \
+cd ..
+
+## Secrets (https://apps.gnome.org/es/app/org.gnome.World.Secrets/)
+# Manage your passwords
+# secrets
+git clone https://aur.archlinux.org/secrets.git && \
+cd secrets && \
 makepkg -sri --noconfirm && \
 cd ..
 
