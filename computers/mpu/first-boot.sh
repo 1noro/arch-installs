@@ -100,6 +100,8 @@ sudo pacman -S --noconfirm --needed wpa_supplicant \
     wireless_tools \
     networkmanager \
     network-manager-applet \
+    openvpn \
+    networkmanager-openvpn \
     gnome-keyring
 
 # systemctl --type=service # (comprobación)
