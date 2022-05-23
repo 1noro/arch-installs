@@ -120,7 +120,10 @@ sudo gpasswd -a "$USER" network
 sudo pacman -S --noconfirm --needed bluez bluez-utils bluez-tools --needed
 # verificamos que el modulo btusb está cargado en el kernel
 lsmod | grep btusb
+# habilitamos el servicio bluetooth
 sudo systemctl enable bluetooth
+# agregamos el usuario a la grupo bluetooth
+usermod -a -G lp cosmo
 
 
 # --- INICIO DE COMANDOS EXCLUSIVOS PARA MPU -----------------------------------
