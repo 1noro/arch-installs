@@ -25,7 +25,7 @@ packagelist=(
     cmatrix # cool
     figlet # ascii art
     # - shells
-    fish
+    # fish # ahora uso bash
     # - entorno C
     gcc
     glibc
@@ -56,13 +56,13 @@ packagelist=(
     # xorg-xkill # (si usas wyland no es necesario)
     simple-scan
     gparted
-    easytag
+    # easytag # ahora uso beet
     # gprename # sustituto de pyrenamer
     filezilla
     wireshark-qt
     bleachbit # limpiador de basura
     gnome-tweaks
-    papirus-icon-theme
+    # papirus-icon-theme # ahora utilizo libadwaita
     seahorse # gestor de claves GPG de GNOME
     # keepassxc # gestor de contraseñas de keepass
     phonon-qt5-vlc # https://wiki.archlinux.org/index.php/KDE#Phonon (debatir entre GStreamer or VLC)
@@ -75,12 +75,13 @@ packagelist=(
     ## funcionabilidad total de pulseaudio
     # muchas de estas aplicaciones no vienen instaladas, pero creo que no
     # hacen falta
-    alsa-utils
-    pulseaudio-alsa
-    lib32-libpulse
-    lib32-alsa-plugins
-    pavucontrol # permite diferenciar mejor que gnome el audio interno del externo
+    # alsa-utils
+    # pulseaudio-alsa
+    # lib32-libpulse
+    # lib32-alsa-plugins
+    # pavucontrol # permite diferenciar mejor que gnome el audio interno del externo
     # puede que haga falta trastear en el ALSAMIXER para que funcione el micro externo
+    # (DESDE QUE INSTALÉ PIPEWIRE NO DEBERIA SER NECESARIO)
 
     ## Editores de texto
     # libreoffice-fresh

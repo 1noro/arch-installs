@@ -46,15 +46,19 @@ sudo pacman -S --noconfirm --needed vulkan-intel lib32-vulkan-intel
 
 # -- inicio pipewire --
 # instalamos pipewire y sus dependencias
-sudo pacman -S --noconfirm --needed pipewire \
+sudo pacman -S --noconfirm --needed 
+    pipewire \
     lib32-pipewire \
     pipewire-docs \
+    wireplumber \
     pipewire-alsa \
     pipewire-pulse \
     pipewire-jack \
     lib32-pipewire-jack \
     gst-plugin-pipewire \
-    pavucontrol
+    qpwgraph \
+    helvum
+# (no me decido entre qpwgraph y helvum)
 # PARECE QUE ESTE PAQUERTE NO HACE FALTA:
 # cd ~/Work/aur; \
 # git clone https://aur.archlinux.org/pipewire-dropin.git; \
