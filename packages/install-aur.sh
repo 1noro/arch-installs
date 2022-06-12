@@ -147,6 +147,16 @@ cd ..
 git clone https://aur.archlinux.org/visual-studio-code-bin.git && \
 cd visual-studio-code-bin && \
 makepkg -sri --noconfirm && \
+cd .. && \
+echo "--enable-features=UseOzonePlatform,WaylandWindowDecorations" >> $HOME/.config/electron17-flags.conf && \
+echo "--ozone-platform=wayland" >> $HOME/.config/electron17-flags.conf
+# Para usar el plugin de Live Share se necesita instalar el paquete:
+# (https://wiki.archlinux.org/title/Visual_Studio_Code)
+# Icu69
+# icu69-bin
+git clone https://aur.archlinux.org/icu69-bin.git && \
+cd icu69-bin && \
+makepkg -sri --noconfirm && \
 cd ..
 
 ## Android Studio: The official Android IDE (Stable branch)
@@ -219,6 +229,17 @@ git clone https://aur.archlinux.org/secrets.git && \
 cd secrets && \
 makepkg -sri --noconfirm && \
 cd ..
+
+# UTILIDADES DE SHELL
+
+## lf
+# terminal file manager
+# lf
+git clone https://aur.archlinux.org/lf.git && \
+cd lf && \
+makepkg -sri --noconfirm && \
+cd ..
+
 
 # -- FIN DE LA INSTALACIÓN -----------------------------------------------------
 
