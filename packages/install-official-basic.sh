@@ -85,8 +85,9 @@ packagelist=(
 
     ## Editores de texto
     # libreoffice-fresh
-    nano
+    # nano
     neovim
+    ripgrep # for Telescope extensuion
     xclip # for X11 clipboard in nvim
     #wl-copy # for WYLAND clipboard in nvim
     
