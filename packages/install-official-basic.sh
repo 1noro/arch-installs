@@ -26,6 +26,7 @@ packagelist=(
     figlet # ascii art
     # - shells
     # fish # ahora uso bash
+    bash-completion
     # - entorno C
     gcc
     glibc
@@ -88,6 +89,9 @@ packagelist=(
     # nano
     neovim
     ripgrep # for Telescope extensuion
+    shellchek # for Coc shell diagnostics
+    shfmt # for Coc shell formatting
+    vint # for Coc .vim diagnostics
     xclip # for X11 clipboard in nvim
     #wl-copy # for WYLAND clipboard in nvim
     
