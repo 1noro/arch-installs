@@ -98,18 +98,18 @@ cd adobe-base-14-fonts && \
 makepkg -sri --noconfirm && \
 cd ..
 
-# otf-nerd-fonts-fira-code
-git clone https://aur.archlinux.org/otf-nerd-fonts-fira-code.git && \
-cd otf-nerd-fonts-fira-code && \
-makepkg -sri --noconfirm && \
-cd ..
+# otf-nerd-fonts-fira-code (desactualizada, y puede que ininecesaria)
+#git clone https://aur.archlinux.org/otf-nerd-fonts-fira-code.git && \
+#cd otf-nerd-fonts-fira-code && \
+#makepkg -sri --noconfirm && \
+#cd ..
 
-# ttf-twemoji-color
+# ttf-twemoji-color (puede que ininecesaria)
 # util para que en mpv aparezcan emojis en los títulos de los vídeos
-git clone https://aur.archlinux.org/ttf-twemoji-color.git && \
-cd ttf-twemoji-color && \
-makepkg -sri --noconfirm && \
-cd ..
+#git clone https://aur.archlinux.org/ttf-twemoji-color.git && \
+#cd ttf-twemoji-color && \
+#makepkg -sri --noconfirm && \
+#cd ..
 
 ## Correo electrónico
 # protonmail-bridge (se necesita una cuenta de pago)

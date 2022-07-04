@@ -173,8 +173,8 @@ packagelist=(
     ttf-indic-otf
     # - fuentes monospace preciosas
     # ttf-anonymous-pro # http://www.marksimonson.com/fonts/view/anonymous-pro
-    ttf-fira-mono # https://en.wikipedia.org/wiki/Fira_Sans
-    otf-fira-mono
+    #ttf-fira-mono # https://en.wikipedia.org/wiki/Fira_Sans (desactualizada)
+    #otf-fira-mono # (desactualizada)
     ttf-fira-code # https://github.com/tonsky/FiraCode (en pruebas para usarla en mi terminal por defecto)
     #otf-fira-code # no se encuentra
 )
