@@ -5,7 +5,7 @@ if [ "$EUID" -ne 0 ]
     exit
 fi
 
-### BORRAR CONFIGURACIÓN INTEL GRAPHICS 2500 ##################################
+### BORRAR CONFIGURACIÓN INTEL GRAPHICS ########################################
 ## Quitamos los módulos de kernel de intel del mkinitcpio.conf
 # agregamos el módulo i915 al kernel de Linux y lo volvemos a configura
 # esto es para cargar KMS lo antes posible al inicio del boot
