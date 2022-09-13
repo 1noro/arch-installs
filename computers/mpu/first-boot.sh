@@ -72,7 +72,8 @@ sudo pacman -S --noconfirm --needed
 # -- final pipewire --
 
 # instalamos gnome y sus extras
-sudo pacman -S --noconfirm --needed gdm \
+sudo pacman -S --noconfirm --needed 
+    gdm \
     gnome \
     gnome-extra \
     gnome-themes-extra \
@@ -89,6 +90,9 @@ sudo pacman -S --noconfirm --needed gdm \
 
 # habilitamos gdm para que se inicie solo
 sudo systemctl enable gdm
+
+# set night-light-enabled in GDM
+sudo -u gdm dbus-launch gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled true
 
 
 # -- default MIME types --------------------------------------------------------
