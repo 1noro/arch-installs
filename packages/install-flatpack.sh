@@ -1,17 +1,21 @@
 #!/bin/bash
 
 packagelist=(
-    com.getpostman.Postman
-    com.github.tchx84.Flatseal
-    com.google.Chrome
-    io.bassi.Amberol
-    org.freedesktop.Platform
-    org.freedesktop.Platform.GL.default
-    org.freedesktop.Platform.VAAPI.Intel
-    org.freedesktop.Platform.openh264
-    org.gnome.Platform
-    org.gnome.World.Secrets
+    # Necesidades de Flatpack
     org.gtk.Gtk3theme.Adwaita-dark
+    com.github.tchx84.Flatseal
+
+    # Web
+    com.getpostman.Postman
+    com.google.Chrome
+
+    # GNOME Circle
+    io.bassi.Amberol
+    # org.gnome.gitlab.somas.Apostrophe
+    org.gnome.World.Secrets
+
+    # Bases de datos
+    flathub io.dbeaver.DBeaverCommunity
 )
 
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo

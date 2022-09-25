@@ -107,10 +107,10 @@ packagelist=(
     clutter # (debian) gir1.2-clutter-1.0
 
     # mail
-    claws-mail
+    # claws-mail
     # claws-themes
-    aspell-en # diccionario EN para claws-mail
-    aspell-es # diccionario ES para claws-mail
+    # aspell-en # diccionario EN para claws-mail
+    # aspell-es # diccionario ES para claws-mail
 
     ## reproductores de vídeo y audio
     # vlc
