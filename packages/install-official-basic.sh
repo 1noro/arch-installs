@@ -50,6 +50,7 @@ packagelist=(
     wireless_tools
     macchanger
     rsync
+    flatpak
 
     ## utilidades básicas (gráficas)
     firefox
@@ -65,7 +66,7 @@ packagelist=(
     gnome-tweaks
     # papirus-icon-theme # ahora utilizo libadwaita
     seahorse # gestor de claves GPG de GNOME
-    # keepassxc # gestor de contraseñas de keepass
+    # keepassxc # gestor de contraseñas de keepass (secrets de gnome mola mas)
     phonon-qt5-vlc # https://wiki.archlinux.org/index.php/KDE#Phonon (debatir entre GStreamer or VLC)
     pkgstats # https://wiki.archlinux.org/index.php/Pkgstats_(Espa%C3%B1ol)
     telegram-desktop

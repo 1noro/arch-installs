@@ -21,11 +21,11 @@ cd "$AUR_DIR"
 # cd ..
 
 ## Navegadores
-# google-chrome
-git clone https://aur.archlinux.org/google-chrome.git && \
-cd google-chrome && \
-makepkg -sri --noconfirm && \
-cd ..
+# google-chrome (substituido por flatpack)
+# git clone https://aur.archlinux.org/google-chrome.git && \
+# cd google-chrome && \
+# makepkg -sri --noconfirm && \
+# cd ..
 
 ## Descargas
 # jdownloader
@@ -35,7 +35,7 @@ makepkg -sri --noconfirm && \
 cd ..
 
 ## VPNs
-# # mullvad
+# # mullvad (substituido por archivo OpenVPN)
 # # hay que mirar el PKGBUILD y comprobar que claves se necesitan
 # # PKGBUILD: https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=mullvad-vpn
 # # dónde encontrar las claves: https://mullvad.net/en/help/open-source/
@@ -79,7 +79,7 @@ cd ..
 # makepkg -sri --noconfirm && \
 # cd ..
 
-# ttf-ms-fonts (https://madmalik.github.io/mononoki/)
+# ttf-ms-fonts
 # Core TTF Fonts from Microsoft, puede que necesaria para alguna apliación
 git clone https://aur.archlinux.org/ttf-ms-fonts.git && \
 cd ttf-ms-fonts && \
@@ -215,20 +215,22 @@ cd ..
 # GNOME GTK4 LIBADWAITA
 
 ## Apostrophe (https://apps.gnome.org/es/app/org.gnome.gitlab.somas.Apostrophe/)
+# (substituido por flatpack)
 # Edit Markdown in style
 # apostrophe
-git clone https://aur.archlinux.org/apostrophe.git && \
-cd apostrophe && \
-makepkg -sri --noconfirm && \
-cd ..
+# git clone https://aur.archlinux.org/apostrophe.git && \
+# cd apostrophe && \
+# makepkg -sri --noconfirm && \
+# cd ..
 
 ## Secrets (https://apps.gnome.org/es/app/org.gnome.World.Secrets/)
+# (substituido por flatpack)
 # Manage your passwords
 # secrets
-git clone https://aur.archlinux.org/secrets.git && \
-cd secrets && \
-makepkg -sri --noconfirm && \
-cd ..
+# git clone https://aur.archlinux.org/secrets.git && \
+# cd secrets && \
+# makepkg -sri --noconfirm && \
+# cd ..
 
 # UTILIDADES DE SHELL
 
