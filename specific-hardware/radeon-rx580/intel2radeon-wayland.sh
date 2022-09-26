@@ -22,7 +22,7 @@ nano /etc/default/grub
 # modificar la siguiente línea
 # GRUB_CMDLINE_LINUX_DEFAULT="loglevel=4 nowatchdog i915.enable_guc=2 snd_hda_codec_hdmi.enable_silent_stream=0 irqpoll"
 # para que quede así
-# GRUB_CMDLINE_LINUX_DEFAULT="loglevel=4 nowatchdog snd_hda_codec_hdmi.enable_silent_stream=0 irqpoll"
+# GRUB_CMDLINE_LINUX_DEFAULT="loglevel=4 nowatchdog irqpoll"
 grub-mkconfig -o /boot/grub/grub.cfg
 
 ## Ponemos en la lista negra los módulos de Intel
