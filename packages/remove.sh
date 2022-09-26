@@ -6,6 +6,7 @@ packagelist=(
     gnome-documents # no le veo la utildad
     gnome-recipes # no le veo la utildad
     gnome-builder # bloated
+    gnome-games # crashea al abrir ¿?
     totem # reproductor de videos de Gnome, no le veo la utilidad
     accerciser
     devhelp
