@@ -21,3 +21,7 @@ packagelist=(
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 flatpak update
 flatpak install --user --assumeyes "${packagelist[@]}"
+
+# reset firefox as the default web browser
+gio mime x-scheme-handler/http firefox.desktop
+gio mime x-scheme-handler/https firefox.desktop
