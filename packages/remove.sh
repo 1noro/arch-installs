@@ -16,8 +16,8 @@ packagelist=(
     gnome-usage # gnome-system-monitor lo substituye
 )
 
-pacman -Rns --noconfirm "${packagelist[@]}"
+pacman -Rcns --noconfirm "${packagelist[@]}"
 # n: borra archivos de configuración
 
 # equivalente a apt autoremove:
-# pacman -Rns $(pacman -Qtdq)
+# pacman -Rcns $(pacman -Qtdq)

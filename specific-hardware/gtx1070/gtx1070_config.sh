@@ -32,7 +32,7 @@ echo 'install i915 /bin/false' >> /etc/modprobe.d/blacklist.conf
 echo 'install intel_agp /bin/false' >> /etc/modprobe.d/blacklist.conf
 
 ## será necesario borrar los drivers de la tarjeta de intel?
-pacman -Rns xf86-video-intel mesa lib32-mesa
+pacman -Rcns xf86-video-intel mesa lib32-mesa
 
 ### INSTALAR CONFIGURACIÓN NVIDIA GTX1070 #####################################
 # https://wiki.archlinux.org/index.php/NVIDIA_(Espa%C3%B1ol)

@@ -74,7 +74,7 @@ sudo pacman -S wpa_supplicant wireless_tools networkmanager network-manager-appl
 # systemctl --type=service
 sudo systemctl stop dhcpcd
 sudo systemctl disable dhcpcd
-sudo pacman -Rns dhcpcd
+sudo pacman -Rcns dhcpcd
 
 sudo systemctl enable wpa_supplicant
 sudo systemctl enable NetworkManager

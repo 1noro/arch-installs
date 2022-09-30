@@ -95,7 +95,7 @@ sudo pacman -S --noconfirm --needed wpa_supplicant \
 # systemctl --type=service # (comprobación)
 sudo systemctl stop dhcpcd
 sudo systemctl disable dhcpcd
-sudo pacman -Rns dhcpcd
+sudo pacman -Rcns dhcpcd
 
 sudo systemctl enable wpa_supplicant
 sudo systemctl enable NetworkManager

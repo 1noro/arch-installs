@@ -30,10 +30,10 @@ echo 'install i915 /bin/false' >> /etc/modprobe.d/blacklist.conf
 echo 'install intel_agp /bin/false' >> /etc/modprobe.d/blacklist.conf
 
 ## Borramos los drivers de la tarjeta de intel
-pacman -Rns xf86-video-intel
+pacman -Rcns xf86-video-intel
 
 ## Borramos los drivers de Vulkan Intel
-pacman -Rns vulkan-intel lib32-vulkan-intel
+pacman -Rcns vulkan-intel lib32-vulkan-intel
 
 ### INSTALAMOS LOS PAQUETES DE AMDGPU ##########################################
 ## Instalamos el DDX driver

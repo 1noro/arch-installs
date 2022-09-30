@@ -185,7 +185,7 @@ cd ..
 # cd nut-monitor && \
 # makepkg -sri --noconfirm && \
 # cd ..
-# DESINSTALAR: sudo pacman -Rns nut-monitor
+# DESINSTALAR: sudo pacman -Rcns nut-monitor
 
 ## rdfind (https://rdfind.pauldreik.se/)
 # Redundant data find - a program that finds duplicate files.
