@@ -168,9 +168,13 @@ sudo mkinitcpio -p linux # volvemos a generar el initramfs en /boot
 sudo pacman -S --noconfirm --needed snapper
 
 sudo snapper -c root create-config / && \
-sudo snapper -c root create -d "primera" && \
+sudo snapper -c root create -d "primera snapshot de / (recien instalado)" && \
 sudo snapper -c home create-config /home && \
-sudo snapper -c home create -d "primera"
+sudo snapper -c home create -d "primera snapshot de /home (recien instalado)"
+
+# comprobación
+# sudo snapper -c root list
+# sudo snapper -c home list
 
 
 ## -- FINALIZACIÓN -------------------------------------------------------------
