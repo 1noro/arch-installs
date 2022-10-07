@@ -15,6 +15,9 @@ if [ -z "$1" ]; then
 fi
 
 HDD=$1
+MAIN_PARTITION=mainpart
+ROOT_SUBVOL=rootvol
+HOME_SUBVOL=homevol
 
 # -- verificamos que entramos en modo UEFI
 ls -A /sys/firmware/efi/efivars
@@ -26,30 +29,31 @@ timedatectl status # (verificación)
 
 # -- formateo del disco --------------------------------------------------------
 # lsblk -fm
-mkfs.fat -F32 -n EFI "${HDD}1"
-mkswap -L swap "${HDD}2"
+mkfs.fat -F32 -n EFI "${HDD}p1"
+mkswap -L swap "${HDD}p2"
 swapon -L swap
-mkfs.btrfs --force --label system "${HDD}3" # nótese que aquí asignamos el nombre "system" a nuestra partición
+# (nótese que aquí asignamos el nombre "${MAIN_PARTITION}" a nuestra partición)
+mkfs.btrfs --force --label "${MAIN_PARTITION}" "${HDD}p3"
 
 # definimos las variables "o" y "o_btrfs" para las opciones de montaje
 o=defaults,x-mount.mkdir
 o_btrfs=$o,compress=lzo,ssd,noatime
 
-# montamos nuestra partición "system" en /mnt
-mount -t btrfs LABEL=system /mnt
+# montamos nuestra partición "${MAIN_PARTITION}" en /mnt
+mount -t btrfs LABEL="${MAIN_PARTITION}" /mnt
 
 # creamos los subvolumes btrfs
-btrfs subvolume create /mnt/root
-btrfs subvolume create /mnt/home
-#btrfs subvolume create /mnt/snapshots # puede que en el futuro si uso snapper esto no haga falta
+btrfs subvolume create "/mnt/${ROOT_SUBVOL}"
+btrfs subvolume create "/mnt/${HOME_SUBVOL}"
+#btrfs subvolume create /mnt/snapshots # si se usa snapper esto no hace falta
 
 # desmontamos todo
 umount -R /mnt
 
 # y ahora montamos los sobvolumenes en su orden correspondiente
-mount -t btrfs -o subvol=root,$o_btrfs LABEL=system /mnt
-mount -t btrfs -o subvol=home,$o_btrfs LABEL=system /mnt/home
-#mount -t btrfs -o subvol=snapshots,$o_btrfs LABEL=system /mnt/.snapshots # puede que en el futuro si uso snapper esto no haga falta
+mount -t btrfs -o subvol="${ROOT_SUBVOL}",$o_btrfs LABEL="${MAIN_PARTITION}" /mnt
+mount -t btrfs -o subvol="${HOME_SUBVOL}",$o_btrfs LABEL="${MAIN_PARTITION}" /mnt/home
+#mount -t btrfs -o subvol=snapshots,$o_btrfs LABEL="${MAIN_PARTITION}" /mnt/.snapshots # si se usa snapper esto no hace falta
 
 # montamos la partición EFI
 mkdir /mnt/boot
@@ -57,8 +61,8 @@ mount LABEL=EFI /mnt/boot
 lsblk
 
 # -- instalacion del sistema base ----------------------------------------------
-# instalamos el sistema base en el disco particionado (pensar en que paquetes 
-# son necesarios aquí desde el principio)
+# instalamos el sistema base en el disco particionado
+# https://wiki.archlinux.org/index.php/Mirrors_(Espa%C3%B1ol)#Lista_por_velocidad
 # nvim /etc/pacman.d/mirrorlist
 # agregar al principio de todo las lineas:
 # Server = http://mirror.librelabucm.org/archlinux/$repo/os/$arch
@@ -101,7 +105,5 @@ cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
 genfstab -L /mnt > /mnt/etc/fstab # Use labels for source identifiers
 
 # -- fin de la instalación base ------------------------------------------------
-# -- copiamos el siguiente script a la carpeta correspondiente
-cp arch-installs/computers/mpu/archiso-chroot.sh /mnt/opt/
 
 echo "## FIN ##"

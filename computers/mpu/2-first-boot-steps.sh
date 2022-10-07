@@ -1,9 +1,11 @@
 #!/bin/bash
 # mpu FIRSTBOOT
 
+HOSTNAME=mpu
+
 # iniciamos sesión como "cosmo"
 git clone https://github.com/1noro/arch-installs.git
-bash arch-installs/computers/mpu/first-boot.sh
+bash "arch-installs/computers/${HOSTNAME}/first-boot.sh"
 
 # -- CONFIGURACION DEL GRUB ----------------------------------------------------
 # (se puede mover al archiso-chroot.sh)

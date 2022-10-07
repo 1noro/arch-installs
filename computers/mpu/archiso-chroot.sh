@@ -8,12 +8,17 @@ if [[ $(id -u) -ne 0 ]]; then
     exit 1
 fi
 
-USER="cosmo"
-HOSTNAME="mpu"
+if [ -z "$1" ]; then
+    echo "Usage: $0 <HOSTNAME>"
+    echo "Example: $0 mycomputer"
+    exit 1
+fi
+
+USER=cosmo
+HOSTNAME=$1
 
 # -- PACMAN --------------------------------------------------------------------
-# el mirrorlis ya está optimizado
-# https://wiki.archlinux.org/index.php/Mirrors_(Espa%C3%B1ol)#Lista_por_velocidad
+# el mirrorlis ya está optimizado en el script anterior
 
 # -- editamos la configuración
 # nvim /etc/pacman.conf
@@ -168,9 +173,5 @@ pacman -S --noconfirm --needed dhcpcd
 # error: command failed to execute correctly
 systemctl enable dhcpcd
 
-
-# -- LIMPIEZA FINAL ------------------------------------------------------------
-# borramos este mismo script
-rm /opt/archiso-chroot.sh
 
 echo "## FIN ##"

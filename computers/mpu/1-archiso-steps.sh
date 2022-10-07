@@ -4,6 +4,9 @@
 
 set -e
 
+HDD=nvme0n1
+HOSTNAME=mpu
+
 # -- comprobaciones iniciales --------------------------------------------------
 # comprobación de red DHCP (por cable)
 ping archlinux.org
@@ -25,12 +28,12 @@ lsblk
 # https://wiki.archlinux.org/index.php/EFI_system_partition#GPT_partitioned_disks
 # https://gtronick.github.io/ALIG/
 # NAME            SIZE  TYPE                    MOUNTPOINT
-# nvme0n1       223,6G  disk
+# ${HDD}        223,6G  disk
 #   p1          512,0M  part EFI System (ESP)   /boot
 #   p2           16,0G  part                    [SWAP]
 #   p3          207,1G  part                    [BTRFS VOLUMES]
 
-fdisk /dev/nvme0n1
+fdisk "/dev/${HDD}"
 # comandos de fdisk:
 # m (listamos la ayuda)
 # g (generamos una tabla GPT)
@@ -46,14 +49,18 @@ fdisk /dev/nvme0n1
 lsblk
 
 # -- ejecución de scripts ------------------------------------------------------
-pacman -Syy && pacman -S --noconfirm --needed git && \
+pacman -Syy && \
+pacman -S --noconfirm --needed git && \
 git clone https://github.com/1noro/arch-installs.git
 
 # script base
-bash arch-installs/computers/mpu/archiso-base.sh /dev/nvme0n1p
+bash "arch-installs/computers/${HOSTNAME}/archiso-base.sh" "/dev/${HDD}"
+
+# -- copiamos el siguiente script a la carpeta correspondiente
+cp "arch-installs/computers/${HOSTNAME}/archiso-chroot.sh" /mnt/tmp/
 
 # script chroot
-arch-chroot /mnt bash /opt/archiso-chroot.sh
+arch-chroot /mnt bash /tmp/archiso-chroot.sh "${HOSTNAME}"
 
 # -- pasos finales -------------------------------------------------------------
 # desmontamos con seguridad el entorno de instalación
