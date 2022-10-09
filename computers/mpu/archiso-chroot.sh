@@ -64,7 +64,7 @@ echo -e "## Contraseña para \e[36mroot\e[m"
 passwd
 
 # creamos y configuramos un nuevo usuario para podrer instalar paquetes desde AUR
-useradd -s /bin/fish -m "$USER" # considerar quitar la opción -m (create_home)
+useradd -s /bin/bash -m "$USER" # considerar quitar la opción -m (create_home)
 echo "## Contraseña para \e[36m$USER\e[m"
 passwd "$USER"
 # usermod -a -G sudo "$USER"
