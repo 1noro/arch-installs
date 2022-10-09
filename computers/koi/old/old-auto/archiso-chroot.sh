@@ -1,5 +1,5 @@
 #!/bin/bash
-# btrfs (GRUB) ARCHISO CHROOT
+# koi btrfs (GRUB) ARCHISO CHROOT
 
 set -e
 
@@ -8,17 +8,12 @@ if [[ $(id -u) -ne 0 ]]; then
     exit 1
 fi
 
-if [ -z "$1" ]; then
-    echo "Usage: $0 <HOSTNAME>"
-    echo "Example: $0 mycomputer"
-    exit 1
-fi
-
-USER=cosmo
-HOSTNAME=$1
+USER="cosmo"
+HOSTNAME="koi"
 
 # -- PACMAN --------------------------------------------------------------------
-# el mirrorlis ya está optimizado en el script anterior
+# el mirrorlis ya está optimizado
+# https://wiki.archlinux.org/index.php/Mirrors_(Espa%C3%B1ol)#Lista_por_velocidad
 
 # -- editamos la configuración
 # nvim /etc/pacman.conf
@@ -37,8 +32,7 @@ sed -i '/ParallelDownloads = 5/s/^#//g' /etc/pacman.conf
 
 sed -i '/\[multilib\]/s/^#//g' /etc/pacman.conf
 # Include = /etc/pacman.d/mirrorlist
-# sed -i '/^#\[multilib]/{N;s/\n#/\n/}' /etc/pacman.conf
-# !!!!esto no está funcionando
+sed -i '/^#\[multilib]/{N;s/\n#/\n/}' /etc/pacman.conf
 
 pacman -Syyu --noconfirm # actualizamos el sistema
 
@@ -64,7 +58,7 @@ echo -e "## Contraseña para \e[36mroot\e[m"
 passwd
 
 # creamos y configuramos un nuevo usuario para podrer instalar paquetes desde AUR
-useradd -s /bin/bash -m "$USER" # considerar quitar la opción -m (create_home)
+useradd -s /bin/fish -m "$USER" # considerar quitar la opción -m (create_home)
 echo "## Contraseña para \e[36m$USER\e[m"
 passwd "$USER"
 # usermod -a -G sudo "$USER"
@@ -129,7 +123,7 @@ pacman -S --noconfirm --needed intel-ucode
 
 # -- instalación y configuración inicial de GRUB
 pacman -S --noconfirm --needed grub efibootmgr
-grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB --removable
+grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
 # https://wiki.archlinux.org/index.php/Kernel_parameters_(Espa%C3%B1ol)
 # https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html
 # https://wiki.archlinux.org/index.php/Improving_performance#Watchdogs
@@ -137,7 +131,7 @@ grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB --re
 # nvim /etc/default/grub
 # editando la linea GRUB_CMDLINE_LINUX_DEFAULT para dejarla así:
 # GRUB_CMDLINE_LINUX_DEFAULT="loglevel=4 nowatchdog i915.enable_guc=2"
-sed -i 's/loglevel=3 quiet/loglevel=4 nowatchdog i915.enable_guc=2 snd_hda_codec_hdmi.enable_silent_stream=0/g' /etc/default/grub
+sed -i 's/loglevel=3 quiet/loglevel=4 nowatchdog i915.enable_guc=2/g' /etc/default/grub
 # de paso, también reducimos el tiempo de espera en la pantalla de grub
 # GRUB_TIMEOUT=2
 sed -i 's/GRUB_TIMEOUT=5/GRUB_TIMEOUT=2/g' /etc/default/grub
@@ -148,10 +142,6 @@ grub-mkconfig -o /boot/grub/grub.cfg
 # instalamos, habilitamos y ejecutamos ssh para poder continuar con la
 # instalación desde otro pc de forma remota
 pacman -S --noconfirm --needed openssh
-# !!!!esto esta fallando:
-# (2/4) Creating temporary files...
-# Failed to open file "/sys/devices/system/cpu/microcode/reload": Read-only file system
-# error: command failed to execute correctly
 systemctl enable sshd
 
 
@@ -167,11 +157,11 @@ systemctl enable fstrim.timer
 # instalamos y habilitamos el demonio más básico de dhcp para que al reiniciar
 # no nos quedemos sin internet
 pacman -S --noconfirm --needed dhcpcd
-# !!!!esto esta fallando:
-# (2/4) Creating temporary files...
-# Failed to open file "/sys/devices/system/cpu/microcode/reload": Read-only file system
-# error: command failed to execute correctly
 systemctl enable dhcpcd
 
+
+# -- LIMPIEZA FINAL ------------------------------------------------------------
+# borramos este mismo script
+rm /opt/archiso-chroot.sh
 
 echo "## FIN ##"

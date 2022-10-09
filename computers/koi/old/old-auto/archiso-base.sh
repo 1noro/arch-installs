@@ -1,5 +1,5 @@
 #!/bin/bash
-# btrfs (GRUB) ARCHISO BASE
+# koi btrfs (GRUB) ARCHISO BASE
 
 set -e
 
@@ -15,12 +15,6 @@ if [ -z "$1" ]; then
 fi
 
 HDD=$1
-MAIN_PARTITION=mainpart
-ROOT_SUBVOL=rootsv
-SRV_SUBVOL=srvsv
-VAR_SUBVOL=varsv
-HOME_ROOT_SUBVOL=homerootsv
-HOME_SUBVOL=homesv
 
 # -- verificamos que entramos en modo UEFI
 ls -A /sys/firmware/efi/efivars
@@ -35,40 +29,36 @@ timedatectl status # (verificación)
 mkfs.fat -F32 -n EFI "${HDD}1"
 mkswap -L swap "${HDD}2"
 swapon -L swap
-# (nótese que aquí asignamos el nombre "${MAIN_PARTITION}" a nuestra partición)
-mkfs.btrfs --force --label "${MAIN_PARTITION}" "${HDD}3"
+mkfs.btrfs --force --label system "${HDD}3" # nótese que aquí asignamos el nombre "system" a nuestra partición
 
 # definimos las variables "o" y "o_btrfs" para las opciones de montaje
 o=defaults,x-mount.mkdir
 o_btrfs=$o,compress=lzo,ssd,noatime
 
-# montamos nuestra partición "${MAIN_PARTITION}" en /mnt
-mount -t btrfs LABEL="${MAIN_PARTITION}" /mnt
+# montamos nuestra partición "system" en /mnt
+mount -t btrfs LABEL=system /mnt
 
 # creamos los subvolumes btrfs
-btrfs subvolume create "/mnt/${ROOT_SUBVOL}"
-btrfs subvolume create "/mnt/${SRV_SUBVOL}"
-btrfs subvolume create "/mnt/${VAR_SUBVOL}"
-btrfs subvolume create "/mnt/${HOME_ROOT_SUBVOL}"
-btrfs subvolume create "/mnt/${HOME_SUBVOL}"
+btrfs subvolume create /mnt/root
+btrfs subvolume create /mnt/home
+#btrfs subvolume create /mnt/snapshots # puede que en el futuro si uso snapper esto no haga falta
 
 # desmontamos todo
 umount -R /mnt
 
 # y ahora montamos los sobvolumenes en su orden correspondiente
-mount -t btrfs -o subvol="${ROOT_SUBVOL}",$o_btrfs LABEL="${MAIN_PARTITION}" /mnt
-mount -t btrfs -o subvol="${SRV_SUBVOL}",$o_btrfs LABEL="${MAIN_PARTITION}" /mnt/srv
-mount -t btrfs -o subvol="${VAR_SUBVOL}",$o_btrfs LABEL="${MAIN_PARTITION}" /mnt/var
-mount -t btrfs -o subvol="${HOME_ROOT_SUBVOL}",$o_btrfs LABEL="${MAIN_PARTITION}" /mnt/root
-mount -t btrfs -o subvol="${HOME_SUBVOL}",$o_btrfs LABEL="${MAIN_PARTITION}" /mnt/home
+mount -t btrfs -o subvol=root,$o_btrfs LABEL=system /mnt
+mount -t btrfs -o subvol=home,$o_btrfs LABEL=system /mnt/home
+#mount -t btrfs -o subvol=snapshots,$o_btrfs LABEL=system /mnt/.snapshots # puede que en el futuro si uso snapper esto no haga falta
 
 # montamos la partición EFI
-mount LABEL=EFI -o $o /mnt/boot
+mkdir /mnt/boot
+mount LABEL=EFI /mnt/boot
 lsblk
 
 # -- instalacion del sistema base ----------------------------------------------
-# instalamos el sistema base en el disco particionado
-# https://wiki.archlinux.org/index.php/Mirrors_(Espa%C3%B1ol)#Lista_por_velocidad
+# instalamos el sistema base en el disco particionado (pensar en que paquetes 
+# son necesarios aquí desde el principio)
 # nvim /etc/pacman.d/mirrorlist
 # agregar al principio de todo las lineas:
 # Server = http://mirror.librelabucm.org/archlinux/$repo/os/$arch
@@ -77,23 +67,7 @@ sed -i '1 i\Server = http://mirror.librelabucm.org/archlinux/$repo/os/$arch' /et
 sed -i '1 i\Server = http://ftp.rediris.es/mirror/archlinux/$repo/os/$arch' /etc/pacman.d/mirrorlist
 sed -i '/ParallelDownloads = 5/s/^#//g' /etc/pacman.conf
 pacman -Syy # refrescamos los repositorios al cambiar el mirrorlist
-pacstrap /mnt base \
-    base-devel \
-    linux \
-    linux-firmware \
-    dosfstools \
-    exfat-utils \
-    btrfs-progs \
-    e2fsprogs \
-    ntfs-3g \
-    nfs-utils \
-    man-db \
-    man-pages \
-    texinfo \
-    sudo \
-    git \
-    neovim \
-    fish
+pacstrap /mnt base base-devel linux linux-firmware dosfstools exfat-utils btrfs-progs e2fsprogs ntfs-3g nfs-utils man-db man-pages texinfo sudo git neovim fish
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
 
 # - este mensaje es completamente normal mientras no generemos los locales
@@ -111,5 +85,7 @@ cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
 genfstab -L /mnt > /mnt/etc/fstab # Use labels for source identifiers
 
 # -- fin de la instalación base ------------------------------------------------
+# -- copiamos el siguiente script a la carpeta correspondiente
+cp arch-installs/computers/koi/archiso-chroot.sh /mnt/opt/
 
 echo "## FIN ##"
