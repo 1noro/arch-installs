@@ -1,5 +1,7 @@
 #!/bin/bash
-# btrfs (GRUB) ARCHISO BASE
+# Arch Linux custom build
+# (btrfs snapper gnome wayland pipewire)
+# Maintainer 1noro <https://github.com/1noro>
 
 set -e
 
@@ -8,19 +10,8 @@ if [[ $(id -u) -ne 0 ]]; then
     exit 1
 fi
 
-if [ -z "$1" ]; then
-    echo "Usage: $0 <HDD_DEVICE>"
-    echo "Example: $0 /dev/sda"
-    exit 1
-fi
+source .env
 
-HDD=$1
-MAIN_PARTITION=mainpart
-ROOT_SUBVOL=rootsv
-SRV_SUBVOL=srvsv
-VAR_SUBVOL=varsv
-HOME_ROOT_SUBVOL=homerootsv
-HOME_SUBVOL=homesv
 
 # -- verificamos que entramos en modo UEFI
 ls -A /sys/firmware/efi/efivars
@@ -32,11 +23,11 @@ timedatectl status # (verificación)
 
 # -- formateo del disco --------------------------------------------------------
 # lsblk -fm
-mkfs.fat -F32 -n EFI "${HDD}1"
-mkswap -L swap "${HDD}2"
+mkfs.fat -F32 -n EFI "${HDD}${PART_PREFIX}1"
+mkswap -L swap "${HDD}${PART_PREFIX}2"
 swapon -L swap
 # (nótese que aquí asignamos el nombre "${MAIN_PARTITION}" a nuestra partición)
-mkfs.btrfs --force --label "${MAIN_PARTITION}" "${HDD}3"
+mkfs.btrfs --force --label "${MAIN_PARTITION}" "${HDD}${PART_PREFIX}3"
 
 # definimos las variables "o" y "o_btrfs" para las opciones de montaje
 o=defaults,x-mount.mkdir
@@ -93,7 +84,7 @@ pacstrap /mnt base \
     sudo \
     git \
     neovim \
-    fish
+    snapper
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
 
 # - este mensaje es completamente normal mientras no generemos los locales

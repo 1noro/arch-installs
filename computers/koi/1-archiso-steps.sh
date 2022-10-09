@@ -1,11 +1,13 @@
 #!/bin/bash
-# btrfs (GRUB) ARCHISO manual steps
+# Arch Linux custom build
+# (btrfs snapper gnome wayland pipewire)
+# Maintainer 1noro <https://github.com/1noro>
+
 # LEER: https://wiki.archlinux.org/index.php/User:Altercation/Bullet_Proof_Arch_Install#Our_partition_plans
 
 set -e
 
-HDD=/dev/sda
-HOSTNAME=koi
+source .env
 
 # -- comprobaciones iniciales --------------------------------------------------
 # comprobación de red DHCP (por cable)

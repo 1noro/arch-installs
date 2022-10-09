@@ -1,5 +1,7 @@
 #!/bin/bash
-# btrfs (GRUB) ARCHISO CHROOT
+# Arch Linux custom build
+# (btrfs snapper gnome wayland pipewire)
+# Maintainer 1noro <https://github.com/1noro>
 
 set -e
 
@@ -8,14 +10,8 @@ if [[ $(id -u) -ne 0 ]]; then
     exit 1
 fi
 
-if [ -z "$1" ]; then
-    echo "Usage: $0 <HOSTNAME>"
-    echo "Example: $0 mycomputer"
-    exit 1
-fi
+source .env
 
-USER=cosmo
-HOSTNAME=$1
 
 # -- PACMAN --------------------------------------------------------------------
 # el mirrorlis ya está optimizado en el script anterior
@@ -58,13 +54,28 @@ Description = Cleaning pacman cache...
 When = PostTransaction
 Exec = /usr/bin/paccache -r" >> /etc/pacman.d/hooks/remove_old_cache.hook
 
+# -- agregamos el hook (trigger) para crear una snapshot antes y despues de la
+# instalación de paquetes
+# (primero creamos una config de snapper para ${ROOT_SUBVOL})
+snapper -c "${ROOT_SUBVOL}" create-config
+# instalamos snap-pac
+pacman -S --noconfirm --needed snap-pac
+# configuramos snap-pac
+echo "[${ROOT_SUBVOL}]
+snapshot = True
+important_packages = [\"linux\"]
+important_commands = [\"pacman -Syu\", \"pacman -Syyu\"]
+desc_limit = 72
+" >> /etc/snap-pac.ini
+
 # -- USUARIOS ------------------------------------------------------------------
 # asignamos una contrseña a root
 echo -e "## Contraseña para \e[36mroot\e[m"
 passwd
 
 # creamos y configuramos un nuevo usuario para podrer instalar paquetes desde AUR
-useradd -s /bin/bash -m "$USER" # considerar quitar la opción -m (create_home)
+# (considerar quitar la opción -m "create home")
+useradd -s /bin/bash -m "$USER"
 echo "## Contraseña para \e[36m$USER\e[m"
 passwd "$USER"
 # usermod -a -G sudo "$USER"

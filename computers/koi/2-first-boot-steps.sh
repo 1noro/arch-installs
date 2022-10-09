@@ -1,7 +1,9 @@
 #!/bin/bash
-# FIRSTBOOT
+# Arch Linux custom build
+# (btrfs snapper gnome wayland pipewire)
+# Maintainer 1noro <https://github.com/1noro>
 
-HOSTNAME=mpu
+source .env
 
 # iniciamos sesión como "cosmo"
 git clone https://github.com/1noro/arch-installs.git

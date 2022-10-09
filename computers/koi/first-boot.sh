@@ -1,4 +1,7 @@
 #!/bin/bash
+# Arch Linux custom build
+# (btrfs snapper gnome wayland pipewire)
+# Maintainer 1noro <https://github.com/1noro>
 
 set -e
 
@@ -7,9 +10,8 @@ if [[ $(id -u) -eq 0 ]]; then
     exit 1
 fi
 
-USER=cosmo
-ROOT_SUBVOL=rootvol
-HOME_SUBVOL=homevol
+source .env
+
 
 # -- DOTFILES ------------------------------------------------------------------
 # (EL SCRIPT DEPLOY AÚN NO ESTÁ FUNCIONANDO, es mas, nada funciona)
@@ -94,12 +96,14 @@ sudo pacman -S --noconfirm --needed
 sudo systemctl enable gdm
 
 # set night-light-enabled in GDM
-sudo -u gdm dbus-launch gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled true
+sudo -u gdm dbus-launch gsettings \
+    set org.gnome.settings-daemon.plugins.color night-light-enabled true
 
 
 # -- default MIME types --------------------------------------------------------
 # para que funcione la opción ver en carpeta de los programas como firefox, etc
-# (resumiendo: permitir a firefox que pueda abrir nautilus cuando quieres ver tus descargas en su carpeta)
+# (resumiendo: permitir a firefox que pueda abrir nautilus cuando quieres ver
+# tus descargas en su carpeta)
 # xdg-mime default org.gnome.Nautilus.desktop inode/directory
 # (parece que ya no hace falta)
 
@@ -122,8 +126,8 @@ sudo pacman -Rcns --noconfirm dhcpcd
 sudo systemctl enable wpa_supplicant
 sudo systemctl enable NetworkManager
 
-# add user to network group
-sudo gpasswd -a "$USER" network
+# add ${USER} to network group
+sudo gpasswd -a "${USER}" network
 
 
 # -- Bluetooth -----------------------------------------------------------------
@@ -141,7 +145,7 @@ sudo pacman -S --noconfirm --needed \
 lsmod | grep btusb
 # habilitamos el servicio bluetooth
 sudo systemctl enable bluetooth
-# agregamos el usuario a la grupo bluetooth (llamado "lp")
+# agregamos ${USER} a la grupo bluetooth (llamado "lp")
 usermod -a -G lp "${USER}"
 
 
@@ -151,48 +155,17 @@ sudo mkdir -p /opt/aur
 sudo chown "${USER}":"${USER}" /opt/aur
 
 
-# --- INICIO DE COMANDOS EXCLUSIVOS PARA MPU -----------------------------------
-cd /opt/aur
-
-# IMPORTANTE: los warnings en el kernel no dicen que necesites ese firmware
-# por eso he decidido no descargar estos paquetes de AUR y probar sin ellos
-
-# (https://gist.github.com/imrvelj/c65cd5ca7f5505a65e59204f5a3f7a6d)
-# solución para los warnings:
-# ==> WARNING: Possibly missing firmware for module: aic94xx
-# ==> WARNING: Possibly missing firmware for module: wd719x
-# git clone https://aur.archlinux.org/aic94xx-firmware.git && \
-# cd aic94xx-firmware && \
-# makepkg -sri --noconfirm
-
-# git clone https://aur.archlinux.org/wd719x-firmware.git && \
-# cd wd719x-firmware && \
-# makepkg -sri --noconfirm
-
-# según los foros esto no es necesario, pero a mi me funciona para quitar el 
-# WARNING al recompilar los módulos dinámicos del nucleo.
-# ==> WARNING: Possibly missing firmware for module: xhci_pci
-# git clone https://aur.archlinux.org/upd72020x-fw.git && \
-# cd upd72020x-fw && \
-# makepkg -sri --noconfirm
-
-cd "$HOME"
-
-# sudo mkinitcpio -p linux # volvemos a generar el initramfs en /boot
-# --- FINAL DE COMANDOS EXCLUSIVOS PARA MPU ------------------------------------
+# --- INICIO DE COMANDOS EXCLUSIVOS PARA ${HOSTNAME} ---------------------------
+bash "arch-installs/computers/${HOSTNAME}/${HOSTNAME}-specific.sh"
+# --- FINAL DE COMANDOS EXCLUSIVOS PARA ${HOSTNAME} ----------------------------
 
 
-# -- primera snapshot en btrfs -------------------------------------------------
-sudo pacman -S --noconfirm --needed snapper
-
-sudo snapper -c "${ROOT_SUBVOL}" create-config / && \
-sudo snapper -c "${ROOT_SUBVOL}" create -d "primera snapshot de ${ROOT_SUBVOL} / (recien instalado)" && \
-sudo snapper -c "${HOME_SUBVOL}" create-config /home && \
-sudo snapper -c "${HOME_SUBVOL}" create -d "primera snapshot de ${HOME_SUBVOL} /home (recien instalado)"
+# -- creamos la snapshot inicial con el sistema recien instalado ---------------
+sudo snapper -c "${ROOT_SUBVOL}" \
+    create -d "primera snapshot de ${ROOT_SUBVOL} (recien instalado)"
 
 # comprobación
 # sudo snapper -c "${ROOT_SUBVOL}" list
-# sudo snapper -c "${HOME_SUBVOL}" list
 
 
 ## -- FINALIZACIÓN -------------------------------------------------------------
