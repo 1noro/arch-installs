@@ -155,10 +155,25 @@ sudo mkdir -p /opt/aur
 sudo chown "${USER}":"${USER}" /opt/aur
 
 
-# --- INICIO DE COMANDOS EXCLUSIVOS PARA ${HOSTNAME} ---------------------------
-bash "arch-installs/computers/${HOSTNAME}/${HOSTNAME}-specific.sh"
-# --- FINAL DE COMANDOS EXCLUSIVOS PARA ${HOSTNAME} ----------------------------
+# -- INICIO DE COMANDOS EXCLUSIVOS PARA ${HOSTNAME} ----------------------------
+bash "${HOSTNAME}-specific.sh"
+# -- FINAL DE COMANDOS EXCLUSIVOS PARA ${HOSTNAME} -----------------------------
 
+
+# -- PACMAN: snap-pac ----------------------------------------------------------
+# agregamos el hook (trigger) para crear una snapshot antes y 
+# despues de la instalación de paquetes
+# (primero creamos una config de snapper para ${ROOT_SUBVOL})
+snapper -c "${ROOT_SUBVOL}" create-config /
+# instalamos snap-pac
+pacman -S --noconfirm --needed snap-pac
+# configuramos snap-pac
+echo "[${ROOT_SUBVOL}]
+snapshot = True
+important_packages = [\"linux\"]
+important_commands = [\"pacman -Syu\", \"pacman -Syyu\"]
+desc_limit = 72
+" >> /etc/snap-pac.ini
 
 # -- creamos la snapshot inicial con el sistema recien instalado ---------------
 sudo snapper -c "${ROOT_SUBVOL}" \

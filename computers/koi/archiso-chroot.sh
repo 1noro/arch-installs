@@ -58,19 +58,6 @@ Description = Cleaning pacman cache...
 When = PostTransaction
 Exec = /usr/bin/paccache -r" >> /etc/pacman.d/hooks/remove_old_cache.hook
 
-# -- agregamos el hook (trigger) para crear una snapshot antes y despues de la
-# instalación de paquetes
-# (primero creamos una config de snapper para ${ROOT_SUBVOL})
-snapper -c "${ROOT_SUBVOL}" create-config
-# instalamos snap-pac
-pacman -S --noconfirm --needed snap-pac
-# configuramos snap-pac
-echo "[${ROOT_SUBVOL}]
-snapshot = True
-important_packages = [\"linux\"]
-important_commands = [\"pacman -Syu\", \"pacman -Syyu\"]
-desc_limit = 72
-" >> /etc/snap-pac.ini
 
 # -- USUARIOS ------------------------------------------------------------------
 # asignamos una contrseña a root
