@@ -31,10 +31,13 @@ sed -i '/Color/s/^#//g' /etc/pacman.conf
 sed -i '/VerbosePkgLists/s/^#//g' /etc/pacman.conf
 sed -i '/ParallelDownloads = 5/s/^#//g' /etc/pacman.conf
 
-sed -i '/\[multilib\]/s/^#//g' /etc/pacman.conf
+# sed -i '/\[multilib\]/s/^#//g' /etc/pacman.conf
 # Include = /etc/pacman.d/mirrorlist
 # sed -i '/^#\[multilib]/{N;s/\n#/\n/}' /etc/pacman.conf
 # !!!!esto no está funcionando
+
+echo "[multilib]
+Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
 
 pacman -Syyu --noconfirm # actualizamos el sistema
 
