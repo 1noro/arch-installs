@@ -21,6 +21,54 @@ timedatectl set-ntp true
 echo "## comprobamos la hora NTP"
 timedatectl status # (verificación)
 
+# -- particionado del disco ----------------------------------------------------
+# comprobación de discos
+lsblk
+
+# - tabla de particiones GPT (GRUB)
+# https://wiki.archlinux.org/index.php/EFI_system_partition#GPT_partitioned_disks
+# https://gtronick.github.io/ALIG/
+# NAME            SIZE  TYPE                    MOUNTPOINT
+# ${HDD}          100%  disk
+#   p1          512,0M  part EFI System (ESP)   /boot
+#   p2           16,0G  part                    [SWAP]
+#   p3        ${resto}  part                    [BTRFS VOLUMES]
+
+# fdisk "${HDD}"
+# comandos de fdisk:
+# m (listamos la ayuda)
+# g (generamos una tabla GPT)
+# n (creamos sda1)
+# t (se selecciona automaticamente la única particion creada)
+# 1 (cambiamos el tipo a EFI System)
+# n (creamos sda2)
+# n (creamos sda3)
+# p (mostramos cómo va a quedar el resultado)
+# w (escribimos los cambios y salimos)
+
+(
+    echo g # generamos una tabla GPT
+    echo n # creamos la partición de /boot
+    echo   # seleccionamos el numero por defecto 1
+    echo   # seleccionamos el bloque de inicio por defecto
+    echo +512M # seleccionamos el tamaño de la partición
+    echo t # cambiamos el tipo de la particion recién creada
+    echo 1 # cambiamos el tipo a EFI System
+    echo n # creamos la partición de SWAP
+    echo   # seleccionamos el numero por defecto 1
+    echo   # seleccionamos el bloque de inicio por defecto
+    echo "+${RAM_SIZE_G}G" # seleccionamos el tamaño de la partición
+    echo n # creamos la partición de los datos
+    echo   # seleccionamos el numero por defecto 1
+    echo   # seleccionamos el bloque de inicio por defecto
+    echo   # seleccionamos el tamaño de la partición (que ocupe lo que queda de disco)
+    echo p # mostramos cómo va a quedar el resultado
+    echo w # escribimos los cambios y salimos
+) | fdisk "${HDD}"
+
+# comprobación de particiones
+lsblk
+
 # -- formateo del disco --------------------------------------------------------
 # lsblk -fm
 mkfs.fat -F32 -n EFI "${HDD}${PART_PREFIX}1"

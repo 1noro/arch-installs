@@ -3,11 +3,7 @@
 # (btrfs snapper gnome wayland pipewire)
 # Maintainer 1noro <https://github.com/1noro>
 
-source .env
-
-# iniciamos sesión como "cosmo"
-git clone https://github.com/1noro/arch-installs.git
-bash "arch-installs/computers/${HOSTNAME}/first-boot.sh"
+set -e
 
 # -- CONFIGURACION DEL GRUB ----------------------------------------------------
 # (se puede mover al archiso-chroot.sh)
@@ -31,4 +27,4 @@ sudo bash arch-installs/packages/remove.sh
 rm -rf arch-installs
 
 # reiniciamos
-sudo reboot
+# sudo reboot
