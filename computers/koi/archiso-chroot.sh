@@ -66,16 +66,16 @@ passwd
 
 # creamos y configuramos un nuevo usuario para podrer instalar paquetes desde AUR
 # (considerar quitar la opción -m "create home")
-useradd -s /bin/bash -m "$USER"
-echo "## Contraseña para \e[36m$USER\e[m"
-passwd "$USER"
-# usermod -a -G sudo "$USER"
+useradd -s /bin/bash -m "${USER}"
+echo "## Contraseña para \e[36m${USER}\e[m"
+passwd "${USER}"
+# usermod -a -G sudo "${USER}"
 # --- inicio sudo manual ---
 # env EDITOR=nvim visudo
 # agregar la siguiente linea:
 # cosmo ALL=(ALL) ALL
 # --- fin sudo manual ---
-echo "$USER	ALL=(ALL) ALL" >> /etc/sudoers
+echo "${USER}	ALL=(ALL) ALL" >> /etc/sudoers
 
 
 # -- HORA ----------------------------------------------------------------------
