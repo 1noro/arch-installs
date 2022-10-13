@@ -36,7 +36,8 @@ sed -i '/ParallelDownloads = 5/s/^#//g' /etc/pacman.conf
 # sed -i '/^#\[multilib]/{N;s/\n#/\n/}' /etc/pacman.conf
 # !!!!esto no está funcionando
 
-echo "[multilib]
+echo "# aggregated during installation
+[multilib]
 Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
 
 pacman -Syyu --noconfirm # actualizamos el sistema
