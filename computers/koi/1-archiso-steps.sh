@@ -10,11 +10,13 @@ set -e
 bash archiso-base.sh
 
 # -- copiamos el siguiente script y el .env a la carpeta correspondiente
-cp .env /mnt/tmp/
-cp archiso-chroot.sh /mnt/tmp/
+cp .env /mnt/opt/
+cp archiso-chroot.sh /mnt/opt/
 
 # script chroot
-arch-chroot /mnt bash /tmp/archiso-chroot.sh
+arch-chroot /mnt bash /opt/archiso-chroot.sh
+
+rm /mnt/opt/.env /mnt/opt/archiso-chroot.sh
 
 # -- pasos finales -------------------------------------------------------------
 # desmontamos con seguridad el entorno de instalación
