@@ -31,29 +31,30 @@ source .env
 # > FOR VIRTUALBOX GUESTS READ:
 # https://wiki.archlinux.org/index.php/VirtualBox/Install_Arch_Linux_as_a_guest
 # https://wiki.archlinux.org/index.php/VirtualBox#Set_guest_starting_resolution
-# esencaialmente solo hay que substitur la instalacíon de xf86-video-intel por estos dos comandos
-# sudo pacman -S --noconfirm --needed virtualbox-guest-utils
-# sudo systemctl enable vboxservice.service
+# esencialmente solo hay que substitur la instalacíon de xf86-video-intel por 
+# estos dos comandos:
+sudo pacman -S --noconfirm --needed virtualbox-guest-utils
+sudo systemctl enable vboxservice.service
 
 # driver de la tarjeta grafica
-sudo pacman -S --noconfirm --needed xf86-video-intel
+#sudo pacman -S --noconfirm --needed xf86-video-intel
 # instalar OpenGl y OpenGl 32 (para Steam, por ejemplo) los paquetes -utils 
 # pueden no ser necesarios, pero ofrecen algunas utilidades para verificar el 
 # correcto funcionamiento de la pila gráfica
 sudo pacman -S --noconfirm --needed \
-     mesa \
-     lib32-mesa \
-     mesa-utils \
-     lib32-mesa-utils
+    mesa \
+    lib32-mesa \
+    mesa-utils \
+    lib32-mesa-utils
 # instalamos los paquietes de Vulkan para poder ejecutar Proton con Steam
 sudo pacman -S --noconfirm --needed \
     vulkan-icd-loader \
     lib32-vulkan-icd-loader \
     vulkan-tools
 # Instalamos el driver específico de Intel para Vulkan
-sudo pacman -S --noconfirm --needed \
-    vulkan-intel \
-    lib32-vulkan-intel
+#sudo pacman -S --noconfirm --needed \
+#    vulkan-intel \
+#    lib32-vulkan-intel
 
 # -- inicio pipewire --
 # instalamos pipewire y sus dependencias
@@ -118,7 +119,8 @@ sudo pacman -S --noconfirm --needed \
     openvpn \
     networkmanager-openvpn
 
-# systemctl --type=service # (comprobación)
+# (comprobación)
+# systemctl --type=service
 sudo systemctl stop dhcpcd
 sudo systemctl disable dhcpcd
 sudo pacman -Rcns --noconfirm dhcpcd
@@ -163,7 +165,8 @@ bash "${HOSTNAME}-specific.sh"
 # -- PACMAN: snap-pac ----------------------------------------------------------
 # agregamos el hook (trigger) para crear una snapshot antes y 
 # despues de la instalación de paquetes
-# (primero creamos una config de snapper para ${ROOT_SUBVOL})
+# (primero instlamos snapper creamos una config para ${ROOT_SUBVOL})
+pacman -S --noconfirm --needed snapper && \
 snapper -c "${ROOT_SUBVOL}" create-config /
 # instalamos snap-pac
 pacman -S --noconfirm --needed snap-pac

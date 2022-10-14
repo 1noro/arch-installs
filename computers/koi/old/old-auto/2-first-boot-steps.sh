@@ -1,9 +1,9 @@
 #!/bin/bash
-# Arch Linux custom build
-# (btrfs snapper gnome wayland pipewire)
-# Maintainer 1noro <https://github.com/1noro>
+# koi FIRSTBOOT
 
-set -e
+# iniciamos sesión como "cosmo"
+git clone https://github.com/1noro/arch-installs.git
+bash arch-installs/computers/koi/first-boot.sh
 
 # -- CONFIGURACION DEL GRUB ----------------------------------------------------
 # (se puede mover al archiso-chroot.sh)
@@ -20,11 +20,11 @@ sudo grub-mkconfig -o /boot/grub/grub.cfg
 # instalamos los paquetes habituales
 sudo bash arch-installs/packages/install-official-basic.sh
 sudo bash arch-installs/packages/install-official-extra.sh
-bash arch-installs/packages/install-aur.sh
+sudo bash arch-installs/packages/install-aur.sh
 sudo bash arch-installs/packages/remove.sh
 
 # borramos este repositorio
 rm -rf arch-installs
 
 # reiniciamos
-# sudo reboot
+sudo reboot

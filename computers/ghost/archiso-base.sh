@@ -131,8 +131,7 @@ pacstrap /mnt base \
     texinfo \
     sudo \
     git \
-    neovim \
-    snapper
+    neovim
 cp /etc/pacman.d/mirrorlist /mnt/etc/pacman.d/mirrorlist
 
 # - este mensaje es completamente normal mientras no generemos los locales
