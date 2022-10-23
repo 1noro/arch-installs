@@ -51,6 +51,7 @@ packagelist=(
     macchanger
     rsync
     flatpak
+    powertop
 
     ## utilidades básicas (gráficas)
     firefox
