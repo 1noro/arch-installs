@@ -13,7 +13,8 @@ packagelist=(
     glade
     gnome-sound-recorder # audacity
     gnome-todo
-    gnome-usage # gnome-system-monitor lo substituye
+    # gnome-usage # gnome-system-monitor lo substituye
+    gnome-user-share # instala apache como dependencia
 )
 
 pacman -Rcns --noconfirm "${packagelist[@]}"
