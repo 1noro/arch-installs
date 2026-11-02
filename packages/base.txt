@@ -14,7 +14,8 @@ e2fsprogs
 exfatprogs         # sustituye al antiguo exfat-utils
 ntfs-3g
 snapper
-grub-btrfs         # arrancar snapshots de snapper desde el menú de GRUB
+snap-pac           # snapshots pre/post de cada transacción de pacman (no hace nada hasta que exista la config "root")
+grub-btrfs        # arrancar snapshots de snapper desde el menú de GRUB
 inotify-tools      # lo necesita grub-btrfsd (vigila /.snapshots); sin él el servicio falla
 
 # arranque

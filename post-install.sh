@@ -124,7 +124,24 @@ setup_snapper() {
         sudo snapper -c home create-config /home
         sudo snapper -c home create -d "recién instalado (/home)"
     fi
-    # que GRUB muestre los snapshots
+
+    # /: snapshots pre/post de pacman (snap-pac), sin timeline; se conservan los 10
+    #    últimos pares (20 snapshots) y 10 pares marcados como importantes
+    sudo snapper -c root set-config TIMELINE_CREATE=no NUMBER_CLEANUP=yes \
+        NUMBER_LIMIT=20 NUMBER_LIMIT_IMPORTANT=10 "ALLOW_USERS=$USER" SYNC_ACL=yes
+    # /home: timeline (cada hora), se conservan 5 horarios y 7 diarios
+    sudo snapper -c home set-config TIMELINE_CREATE=yes TIMELINE_CLEANUP=yes \
+        TIMELINE_LIMIT_HOURLY=5 TIMELINE_LIMIT_DAILY=7 TIMELINE_LIMIT_WEEKLY=0 \
+        TIMELINE_LIMIT_MONTHLY=0 TIMELINE_LIMIT_YEARLY=0 "ALLOW_USERS=$USER" SYNC_ACL=yes
+    # snap-pac marca como importantes las actualizaciones del kernel y los -Syu
+    sudo tee /etc/snap-pac.ini >/dev/null <<'EOF'
+[root]
+important_packages = ["linux", "linux-lts"]
+important_commands = ["pacman -Syu"]
+EOF
+    sudo systemctl enable --now snapper-timeline.timer snapper-cleanup.timer
+
+    # que GRUB muestre los snapshots (grub-btrfsd lo mantiene al día después)
     sudo grub-mkconfig -o /boot/grub/grub.cfg
 }
 

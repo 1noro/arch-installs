@@ -126,6 +126,27 @@ GPT/UEFI. Todo se calcula en [`lib/disk.sh`](lib/disk.sh):
 Subvolúmenes (`compress=zstd:3,noatime`): `@` → `/`, `@home`, `@snapshots` →
 `/.snapshots`, `@var_log`, `@var_cache`, `@docker` → `/var/lib/docker`.
 
+## Snapshots
+
+Se configuran en `post-install.sh` (snapper necesita el sistema arrancado):
+
+- **`/` (config `root`)**: `snap-pac` hace un snapshot *pre* y otro *post* en cada
+  transacción de pacman (también las de paru). Se guardan los 10 últimos pares, más
+  10 pares *importantes* (actualizaciones del kernel y `pacman -Syu`). Sin timeline.
+- **`/home` (config `home`)**: timeline cada hora; se conservan 5 horarios y 7 diarios.
+- `snapper-timeline.timer` y `snapper-cleanup.timer` crean y limpian los snapshots;
+  `cosmo` puede usar `snapper` sin sudo (`ALLOW_USERS`).
+- **GRUB**: `grub-btrfsd` añade cada snapshot nuevo al submenú *Arch Linux snapshots*.
+  El initramfs lleva el hook `grub-btrfs-overlayfs` (por eso usa `udev` en vez de
+  `systemd`): un snapshot arrancado es de solo lectura con una capa en RAM, así que
+  el sistema funciona pero los cambios se pierden al reiniciar.
+- **Volver a un snapshot**: arranca en él desde GRUB, comprueba que va bien y
+  ejecuta `sudo snapper rollback`; reinicia.
+- **Aviso**: `/boot` (la ESP, FAT32) no entra en los snapshots. Un snapshot anterior a
+  una actualización del kernel arranca con el kernel actual y no encuentra sus
+  módulos en `/usr/lib/modules`: sirve para rescatar ficheros o hacer el rollback,
+  pero tras el rollback hay que reinstalar el kernel (`sudo pacman -S linux`).
+
 ## Estructura
 
 ```

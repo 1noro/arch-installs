@@ -140,9 +140,12 @@ install_official() {
 configure_boot() {
     step "initramfs y GRUB"
 
+    mkdir -p /etc/mkinitcpio.conf.d
     if ((${#MKINITCPIO_MODULES[@]})); then
-        mkdir -p /etc/mkinitcpio.conf.d
         echo "MODULES=(${MKINITCPIO_MODULES[*]})" > /etc/mkinitcpio.conf.d/10-host.conf
+    fi
+    if ((${#MKINITCPIO_HOOKS[@]})); then
+        echo "HOOKS=(${MKINITCPIO_HOOKS[*]})" > /etc/mkinitcpio.conf.d/20-hooks.conf
     fi
     mkinitcpio -P
 
