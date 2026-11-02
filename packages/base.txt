@@ -15,7 +15,7 @@ exfatprogs         # sustituye al antiguo exfat-utils
 ntfs-3g
 snapper
 snap-pac           # snapshots pre/post de cada transacción de pacman (no hace nada hasta que exista la config "root")
-grub-btrfs        # arrancar snapshots de snapper desde el menú de GRUB
+grub-btrfs         # arrancar snapshots de snapper desde el menú de GRUB
 inotify-tools      # lo necesita grub-btrfsd (vigila /.snapshots); sin él el servicio falla
 
 # arranque
@@ -24,6 +24,7 @@ efibootmgr
 
 # red
 networkmanager     # gestiona también el wifi (usa wpa_supplicant como backend)
+wireless-regdb     # base de datos de dominios regulatorios wifi (sin ella: "regulatory.db failed" al arrancar)
 openssh
 
 # herramientas base
