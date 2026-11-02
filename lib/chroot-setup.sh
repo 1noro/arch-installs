@@ -156,6 +156,12 @@ configure_boot() {
 
     local cmdline="$KERNEL_CMDLINE"
     [[ -n $KERNEL_CMDLINE_EXTRA ]] && cmdline+=" $KERNEL_CMDLINE_EXTRA"
+    # hibernación: el hook `resume` (initramfs de busybox) necesita saber cuál es el swap
+    local swap_dev
+    swap_dev=$(awk '$3 == "swap" && $1 !~ /^#/ {print $1; exit}' /etc/fstab)
+    if [[ -n $swap_dev && " ${MKINITCPIO_HOOKS[*]} " == *" resume "* ]]; then
+        cmdline+=" resume=$swap_dev"
+    fi
     set_kv /etc/default/grub GRUB_CMDLINE_LINUX_DEFAULT "\"$cmdline\""
     set_kv /etc/default/grub GRUB_TIMEOUT "$GRUB_TIMEOUT"
     set_kv /etc/default/grub GRUB_TIMEOUT_STYLE menu
