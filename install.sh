@@ -35,7 +35,7 @@ Opciones:
   --plan            solo muestra el disco y el reparto de particiones; no toca nada
   --yes             no pedir confirmaciones (contraseñas: ROOT_PASSWORD / USER_PASSWORD)
   --reboot          reiniciar al terminar sin preguntar
-  --ref REF         rama o tag del repositorio a descargar (por defecto: $DEFAULT_REF)
+  --ref REF         rama, tag o commit del repositorio a descargar (por defecto: $DEFAULT_REF)
   -h, --help        esta ayuda
 EOF
 }
@@ -62,7 +62,8 @@ if [[ -z $SCRIPT_DIR || ! -f $SCRIPT_DIR/lib/common.sh ]]; then
     echo "==> descargando $GITHUB_REPO@$REF"
     SRC=/tmp/arch-installs
     rm -rf "$SRC" && mkdir -p "$SRC"
-    curl -fsSL "https://github.com/$GITHUB_REPO/archive/refs/heads/$REF.tar.gz" \
+    # archive/<ref> admite ramas (también con /), tags y commits
+    curl -fsSL "https://github.com/$GITHUB_REPO/archive/$REF.tar.gz" \
         | tar -xz -C "$SRC" --strip-components=1
     args=("$HOST_ARG")
     [[ -n $DISK ]] && args=(--disk "$DISK" "${args[@]}")
@@ -158,6 +159,12 @@ if ! reflector --country "$MIRROR_COUNTRIES" --protocol https --age 24 --latest 
     { printf 'Server = %s\n' "${MIRRORS_FALLBACK[@]}"; cat /etc/pacman.d/mirrorlist; } >/tmp/mirrorlist.new
     cp /tmp/mirrorlist.new /etc/pacman.d/mirrorlist
 fi
+
+# con una ISO de hace semanas el keyring puede no conocer las claves de paquetes
+# nuevos y pacstrap falla con "invalid or corrupted package (PGP signature)"
+systemctl is-active --quiet pacman-init.service || systemctl start pacman-init.service || true
+pacman -Sy --noconfirm --needed archlinux-keyring \
+    || warn "no se pudo actualizar archlinux-keyring; sigo con el de la ISO"
 
 cpu_ucode() {
     case $(awk -F': ' '/^vendor_id/ {print $2; exit}' /proc/cpuinfo) in

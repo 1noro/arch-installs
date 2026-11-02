@@ -2,7 +2,7 @@
 # lib/chroot-setup.sh — configuración del sistema recién instalado. Lo ejecuta
 # install.sh dentro de `arch-chroot /mnt`; no hace falta lanzarlo a mano.
 #
-# Entrada (variables de entorno): HOST, ROOT_HASH, USER_HASH, P_ROOT
+# Entrada (variables de entorno): HOST, ROOT_HASH, USER_HASH
 
 set -Eeuo pipefail
 
@@ -126,7 +126,14 @@ install_official() {
         printf '%s\n' "${missing[@]}" > /root/packages-missing.txt
     fi
     log "instalando ${#avail[@]} paquetes"
-    pacman -S --needed --noconfirm "${avail[@]}"
+    # ~2000 paquetes: un mirror que corta la descarga no debe tirar la instalación
+    local try
+    for try in 1 2 3; do
+        pacman -S --needed --noconfirm "${avail[@]}" && return 0
+        warn "pacman -S ha fallado (intento $try/3); reintento en 10 s"
+        sleep 10
+    done
+    die "no se pudieron instalar los paquetes oficiales"
 }
 
 # -- initramfs y arranque -----------------------------------------------------------------------------

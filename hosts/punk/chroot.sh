@@ -1,9 +1,8 @@
 # hosts/punk/chroot.sh — se carga (source) al final de lib/chroot-setup.sh.
 # shellcheck shell=bash
 
-# TLP y power-profiles-daemon (el selector "Modo de energía" de GNOME) se pisan.
-# Aquí manda TLP porque es el único que gestiona los umbrales de carga de la batería.
-systemctl mask power-profiles-daemon.service
+# power-profiles-daemon no se instala: tlp-pd (servicio activado en host.conf) ofrece
+# la misma API D-Bus sobre TLP, así que el selector de GNOME sigue funcionando.
 # recomendado por TLP: que systemd no restaure el estado de rfkill por su cuenta
 systemctl mask systemd-rfkill.service systemd-rfkill.socket
 

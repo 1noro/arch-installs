@@ -94,7 +94,7 @@ activa los servicios de AUR. Es idempotente: si algo falla se puede relanzar.
    ```
    Si el T470 tiene un disco SATA y un NVMe, se prefiere el NVMe (`DISK_PREFER` en `hosts/punk/host.conf`). El swap se ajusta a la RAM del equipo (8 o 16 GB).
 4. Reinicia, entra en GDM y ejecuta `/opt/arch-installs/post-install.sh`. El wifi hay que volver a configurarlo en GNOME (el del instalador no se copia).
-5. Comprueba la energía: `sudo tlp-stat -b` (umbrales de carga 75/80 en BAT0 y BAT1) y `sudo tlp-stat -s`. Para cargar al 100 % un día de viaje: `sudo tlp fullcharge`.
+5. Comprueba la energía: `sudo tlp-stat -b` (umbrales de carga 75/80 en BAT0 y BAT1) y `sudo tlp-stat -s`. Para cargar al 100 % un día de viaje: `sudo tlp fullcharge`. El selector *Modo de energía* de GNOME funciona a través de `tlp-pd` (en lugar de `power-profiles-daemon`, que no se instala).
 6. Avisos del instalador (los muestra al final del chroot): GPU NVIDIA 940MX (se usa `nouveau`) y lector de huellas Validity (requiere paquetes de AUR a mano).
 
 ### Mientras la rama no esté en `main`

@@ -15,6 +15,7 @@ exfatprogs         # sustituye al antiguo exfat-utils
 ntfs-3g
 snapper
 grub-btrfs         # arrancar snapshots de snapper desde el menú de GRUB
+inotify-tools      # lo necesita grub-btrfsd (vigila /.snapshots); sin él el servicio falla
 
 # arranque
 grub
