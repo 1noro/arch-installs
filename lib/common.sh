@@ -49,7 +49,10 @@ load_host() {
 read_pkglist() {
     local f
     for f in "$@"; do
-        [[ -f $f ]] && sed 's/#.*//' "$f"
+        # `|| continue` y no `&&`: si el último fichero no existe, el bucle devolvería 1
+        # y con pipefail toda la tubería fallaría (salta el trap ERR aunque la lista esté bien)
+        [[ -f $f ]] || continue
+        sed 's/#.*//' "$f"
     done | tr -s '[:space:]' '\n' | sed '/^$/d' | awk '!seen[$0]++'
 }
 
