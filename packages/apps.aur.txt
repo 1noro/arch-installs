@@ -2,7 +2,6 @@ brave-bin
 tor-browser-bin
 autofirma
 jdownloader2
-rustdesk-bin
 woeusb
 feishin-bin
 scrobbler                # cliente last.fm (arrastra python-lfm)

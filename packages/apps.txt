@@ -9,7 +9,6 @@ telegram-desktop
 qbittorrent
 filezilla
 wireshark-qt
-keepassxc
 bleachbit
 gparted
 okular
