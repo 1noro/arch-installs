@@ -29,6 +29,16 @@ starship           # prompt (lo usan los dotfiles si está instalado)
 nvm                # node (lo carga .bashrc de los dotfiles si está instalado)
 yadm               # dotfiles
 
+# --- lo que piden los dotfiles
+ttf-jetbrains-mono-nerd   # "JetBrainsMono Nerd Font Mono" de alacritty.toml y fonts.conf
+bc                 # .config/lf/preview (cálculo del tamaño de la vista previa)
+odt2txt            # lf preview: .odt/.ods/.odp
+catdoc             # lf preview: .doc
+docx2txt           # lf preview: .docx
+transmission-cli   # lf preview: .torrent (transmission-show)
+poppler            # lf preview: .pdf (pdftoppm); hoy llega como dependencia, mejor explícito
+libcdio            # lf preview: .iso (iso-info)
+
 # --- hardware / sistema
 lm_sensors
 powertop
