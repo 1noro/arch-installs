@@ -4,9 +4,12 @@
 #
 #   /opt/arch-installs/post-install.sh
 #
-# Hace: paru → paquetes AUR → flatpak → dotfiles (yadm) → snapper → servicios
-# de AUR. Es idempotente: si algo falla (típico: un paquete AUR que no compila) se
-# puede volver a lanzar y solo reintenta lo que falte.
+# Hace: paquetes oficiales que falten → paru → paquetes AUR → flatpak → dotfiles
+# (yadm) → snapper → servicios de AUR. Es idempotente: si algo falla (típico: un
+# paquete AUR que no compila) se puede volver a lanzar y solo reintenta lo que
+# falte; también sirve para aplicar paquetes nuevos añadidos a las listas.
+#
+# Log: ~/.local/state/arch-installs/post-install.log
 
 set -Eeuo pipefail
 
@@ -16,6 +19,10 @@ source "$REPO_DIR/lib/common.sh"
 trap 'err "falló la línea $LINENO: $BASH_COMMAND"' ERR
 
 need_user
+LOG_FILE=$HOME/.local/state/arch-installs/post-install.log
+mkdir -p "${LOG_FILE%/*}"
+exec > >(tee -a "$LOG_FILE") 2>&1
+printf '\n===== %s =====\n' "$(date '+%F %T')"
 HOST=$(< /etc/hostname)
 load_host "$HOST"
 FAILED=()
@@ -38,12 +45,37 @@ install_paru() {
     rm -rf "$tmp"
 }
 
+# -- paquetes oficiales: los que se hayan añadido a las listas después de instalar -----------------------------
+sync_official() {
+    local -a files want missing=() unknown=()
+    mapfile -t files < <(echo "$REPO_DIR/packages/base.txt"; pkg_files official)
+    mapfile -t want < <(read_pkglist "${files[@]}")
+    local known p
+    known=$({ pacman -Slq; pacman -Sgq; } | sort -u)
+    for p in "${want[@]}"; do
+        pacman -Qq "$p" &>/dev/null && continue
+        if grep -qxF -- "$p" <<<"$known"; then missing+=("$p"); else unknown+=("$p"); fi
+    done
+    ((${#unknown[@]})) && warn "no existen en los repositorios: ${unknown[*]}"
+    ((${#missing[@]})) || return 0
+    step "paquetes oficiales nuevos (${#missing[@]})"
+    log "${missing[*]}"
+    sudo pacman -S --needed --noconfirm "${missing[@]}" \
+        || { warn "pacman -S ha fallado"; FAILED+=("pacman:${missing[*]}"); }
+}
+
+# keyserver.ubuntu.com no siempre tiene las subclaves al día (p. ej. la de Tor
+# Browser devuelve "No data"): se prueban varios servidores
 import_gpg_keys() {
-    local key
+    local key ks ok
     for key in $(read_pkglist "$REPO_DIR/packages/gpg-keys.txt"); do
         gpg --list-keys "$key" &>/dev/null && continue
-        gpg --keyserver keyserver.ubuntu.com --recv-keys "$key" \
-            || { warn "no se pudo importar la clave $key"; FAILED+=("gpg:$key"); }
+        ok=0
+        for ks in hkps://keyserver.ubuntu.com hkps://keys.openpgp.org hkps://pgp.mit.edu; do
+            timeout 60 gpg --keyserver "$ks" --recv-keys "$key" && gpg --list-keys "$key" &>/dev/null \
+                && { ok=1; break; }
+        done
+        ((ok)) || { warn "no se pudo importar la clave $key"; FAILED+=("gpg:$key"); }
     done
 }
 
@@ -157,6 +189,7 @@ enable_post_services() {
     done
 }
 
+sync_official
 install_paru
 import_gpg_keys
 install_aur
