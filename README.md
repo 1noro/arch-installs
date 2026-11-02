@@ -60,7 +60,7 @@ activa los servicios de AUR. Es idempotente: si algo falla se puede relanzar.
 2. **Haz copia de lo que quieras conservar**: el instalador borra el disco entero. Lo que no esté en el repo se pierde (`/home`, configuración de NUT, perfiles de red...).
 3. Arranca el USB en **modo UEFI** (en la BIOS desactiva CSM/modo legacy; Secure Boot desactivado).
 4. En el menú de Arch elige *Arch Linux install medium*. Vas a quedar como `root` en una consola.
-5. Distribución de teclado de la consola (opcional): `loadkeys es`.
+5. Distribución de teclado de la consola: el instalador ya arranca en `us`. Para tener teclas muertas (US internacional, como en el sistema instalado): `loadkeys us-acentos`.
 
 ### Instalar mpu (sobremesa)
 
