@@ -1,0 +1,13 @@
+# Impresión y escáner (CUPS + avahi para impresoras de red).
+cups
+foomatic-db
+foomatic-db-engine
+foomatic-db-gutenprint-ppds
+foomatic-db-nonfree
+foomatic-db-nonfree-ppds
+foomatic-db-ppds
+gutenprint
+hplip              # HP LaserJet Pro M148fdw
+sane-airscan
+avahi
+nss-mdns

@@ -1,0 +1,91 @@
+# Desarrollo: compiladores, lenguajes, contenedores, kubernetes, LaTeX.
+
+# --- C / ensamblador / herramientas de build
+gcc
+make
+autoconf
+autoconf-archive
+automake
+libtool
+m4
+bison
+flex
+nasm
+patch
+pkgconf
+binutils
+gettext
+ccache
+libiconv
+sysprof
+
+# --- lenguajes
+go
+rustup             # luego: rustup default stable (lo hace post-install.sh)
+jdk-openjdk
+jdk11-openjdk
+ocaml
+ocaml-zarith
+php
+composer
+python-flask
+python-pillow
+python-pytz
+qt6-tools
+
+# --- contenedores / cloud
+docker
+docker-buildx
+docker-compose
+podman
+podman-compose
+aardvark-dns
+fuse-overlayfs
+kubectl
+dive               # antes dive-bin (AUR)
+helm
+minikube
+ansible
+aws-cli
+hugo
+mysql-workbench
+
+# --- editores / IDEs
+zed
+godot
+
+# --- LaTeX (texlive-most ya no existe; esto es el subconjunto que usas)
+biber
+texlive-basic
+texlive-bibtexextra
+texlive-binextra
+texlive-fontsextra
+texlive-formatsextra
+texlive-games
+texlive-humanities
+texlive-langarabic
+texlive-langchinese
+texlive-langcjk
+texlive-langcyrillic
+texlive-langczechslovak
+texlive-langenglish
+texlive-langeuropean
+texlive-langfrench
+texlive-langgerman
+texlive-langgreek
+texlive-langitalian
+texlive-langjapanese
+texlive-langkorean
+texlive-langother
+texlive-langpolish
+texlive-langportuguese
+texlive-langspanish
+texlive-latexextra
+texlive-luatex
+texlive-mathscience
+texlive-music
+texlive-pictures
+texlive-pstricks
+texlive-publishers
+texlive-xetex
+pandoc-cli

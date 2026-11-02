@@ -1,0 +1,7 @@
+# Claves PGP que piden los PKGBUILD de AUR (validpgpkeys). post-install.sh las
+# importa antes de compilar. Revisadas contra los PKGBUILD el 2026-11-02.
+8657ABB260F056B1E5190839D9C4D26D0E604491   # lib32-openssl-1.0 (Richard Levitte)
+7953AC1FBC3DC8B3B292393ED5E9E43F7DF9EE8C   # lib32-openssl-1.0 (Matt Caswell)
+A1198702FC3E0A09A9AE5B75D5A1D4F266DE8DDF   # mullvad-vpn-bin
+7C20ADCD35D9797789B6BCC046D62DD9F1DE636E   # neofetch
+EF6E286DDA85EA2A4BA7DE684E2C6E8793298290   # tor-browser-bin (Tor Browser Developers)

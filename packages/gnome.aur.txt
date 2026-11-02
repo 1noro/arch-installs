@@ -1,0 +1,6 @@
+nautilus-open-any-terminal
+cheese
+adobe-base-14-fonts
+open-dyslexic-fonts
+ttf-ms-fonts
+ttf-symbola

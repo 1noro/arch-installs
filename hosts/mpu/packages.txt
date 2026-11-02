@@ -1,0 +1,21 @@
+# Específico de mpu: gráficos AMD (Mesa/RADV), NAS por NFS, SAI.
+
+# --- gráficos (Radeon RX 580 / amdgpu). El driver Xorg xf86-video-amdgpu ya no hace
+# falta: GNOME usa Wayland y Xorg tira de modesetting.
+mesa
+lib32-mesa
+mesa-utils
+lib32-mesa-utils
+vulkan-icd-loader
+lib32-vulkan-icd-loader
+vulkan-radeon
+lib32-vulkan-radeon
+vulkan-intel         # iGPU UHD 750 (la usas para llama.cpp/vulkan)
+lib32-vulkan-intel
+vulkan-tools
+libva-utils
+lact                 # control de la GPU AMD (undervolt/ventiladores)
+
+# --- NAS / SAI
+nfs-utils
+nut

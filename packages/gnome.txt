@@ -1,0 +1,109 @@
+# Escritorio GNOME (Wayland) + audio + bluetooth + fuentes.
+# Lista explícita (no se usan los grupos gnome / gnome-extra) para que quede
+# reproducido exactamente lo que se usa y no vuelvan los paquetes descartados
+# (epiphany, totem, loupe, gnome-console, gnome-tour, snapshot...).
+
+# --- núcleo
+gdm
+gnome-shell
+gnome-session
+gnome-settings-daemon
+gnome-control-center
+gnome-keyring
+gnome-menus
+gnome-shell-extensions
+mutter
+nautilus
+nautilus-python
+xdg-desktop-portal
+xdg-desktop-portal-gnome
+xdg-desktop-portal-gtk
+xdg-user-dirs-gtk
+gnome-backgrounds
+gnome-themes-extra
+adw-gtk-theme       # tema libadwaita para apps GTK3 (antes adw-gtk3, AUR)
+gnome-tweaks
+dconf-editor
+gvfs
+gvfs-afc
+gvfs-goa
+gvfs-gphoto2
+gvfs-mtp
+gvfs-nfs
+gvfs-smb
+localsearch        # indexador (antes tracker-miners), lo usan nautilus y gnome-music
+bolt               # thunderbolt
+network-manager-applet
+networkmanager-openvpn
+openvpn
+
+# --- aplicaciones de GNOME
+baobab
+eog
+evince
+evolution
+file-roller
+gnome-calculator
+gnome-calendar
+gnome-characters
+gnome-clocks
+gnome-color-manager
+gnome-connections
+gnome-contacts
+gnome-disk-utility
+gnome-font-viewer
+gnome-logs
+gnome-maps
+gnome-music
+gnome-remote-desktop
+gnome-screenshot
+gnome-software
+gnome-system-monitor
+gnome-terminal
+gnome-text-editor
+gnome-usage
+gnome-user-docs
+gnome-video-effects
+gnome-weather
+orca
+seahorse
+simple-scan
+sushi
+yelp
+
+# --- audio (PipeWire)
+pipewire
+pipewire-alsa
+pipewire-pulse
+pipewire-jack
+wireplumber
+gst-plugin-pipewire
+gst-libav
+alsa-utils
+pavucontrol
+qpwgraph
+helvum
+
+# --- bluetooth
+bluez
+bluez-utils
+bluez-tools
+
+# --- fuentes
+noto-fonts-emoji
+noto-fonts-cjk
+gnu-free-fonts
+ttf-liberation
+ttf-fira-code
+ttf-arphic-uming
+ttf-arphic-ukai
+ttf-indic-otf
+otf-latin-modern
+otf-latinmodern-math
+adobe-source-han-sans-otc-fonts
+adobe-source-han-serif-otc-fonts
+ibus-libpinyin     # método de entrada chino (fuente de entrada 'ibus:libpinyin')
+
+# --- portapapeles / varios de escritorio
+wl-clipboard
+xclip              # para nvim bajo XWayland

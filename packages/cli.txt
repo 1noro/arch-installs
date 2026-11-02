@@ -1,0 +1,59 @@
+# Utilidades de terminal, red y mantenimiento (todos los equipos).
+
+# --- básicas
+tree
+fzf
+eza                # ls mejorado (antes exa, ya no existe en los repos)
+htop
+tldr
+ripgrep
+jq
+yq
+tmux
+zellij
+lf
+rsync
+rclone
+sshfs
+mediainfo
+perl-file-mimeinfo
+unrar
+7zip
+plocate
+file
+which
+sl
+cmatrix
+figlet
+starship           # prompt (lo usan los dotfiles si está instalado)
+nvm                # node (lo carga .bashrc de los dotfiles si está instalado)
+yadm               # dotfiles
+
+# --- hardware / sistema
+lm_sensors
+powertop
+nvme-cli
+udisks2
+pkgstats
+
+# --- red
+curl
+wget
+net-tools
+ethtool
+bind               # dig, nslookup (antes dnsutils)
+traceroute
+inetutils
+nmap
+iperf3
+macchanger
+aircrack-ng
+wireless_tools
+flatpak
+
+# --- shell / lint
+shellcheck
+shfmt
+vint
+python-pynvim
+

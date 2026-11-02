@@ -1,0 +1,36 @@
+# Juegos y compatibilidad (necesita multilib, que chroot-setup.sh activa).
+steam
+gamescope
+lib32-gamemode
+lib32-alsa-plugins
+lib32-libpulse
+lib32-pipewire
+lib32-pipewire-jack
+mgba-sdl
+desmume
+openra
+prismlauncher
+wine
+wine-gecko
+wine-mono
+winetricks
+# juegos de GNOME
+five-or-more
+four-in-a-row
+gnome-2048
+gnome-chess
+gnome-klotski
+gnome-mahjongg
+gnome-mines
+gnome-nibbles
+gnome-robots
+gnome-sudoku
+gnome-taquin
+gnome-tetravex
+hitori
+iagno
+lightsoff
+puzzles
+quadrapassel
+swell-foop
+tali
