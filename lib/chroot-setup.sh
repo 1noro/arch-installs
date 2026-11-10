@@ -191,6 +191,13 @@ configure_boot() {
     # con linux-lts instalado, grub-mkconfig lo pondría primero (orden por nombre):
     # la entrada por defecto debe ser el kernel normal; el LTS queda en "Opciones avanzadas"
     set_kv /etc/default/grub GRUB_TOP_LEVEL '"/boot/vmlinuz-linux"'
+    # grub-btrfs lista cualquier subvolumen como snapshot: sin esto, los de Docker
+    # (en @docker, que no casa con sus prefijos por defecto) llenan el menú y su
+    # límite de 50 deja fuera los snapshots de snapper
+    local gbc=/etc/default/grub-btrfs/config
+    if [[ -f $gbc ]] && ! grep -q '"@docker"' "$gbc"; then
+        sed -i -E 's|^#?GRUB_BTRFS_IGNORE_PREFIX_PATH=\(|GRUB_BTRFS_IGNORE_PREFIX_PATH=("@docker" |' "$gbc"
+    fi
     if [[ -f $REPO_DIR/assets/grub-bg.png ]]; then
         install -Dm644 "$REPO_DIR/assets/grub-bg.png" /boot/grub/grub-bg.png
         set_kv /etc/default/grub GRUB_BACKGROUND '"/boot/grub/grub-bg.png"'
