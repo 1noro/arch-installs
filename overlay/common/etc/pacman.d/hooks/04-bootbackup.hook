@@ -1,0 +1,15 @@
+# /boot es la ESP (FAT32) y no entra en los snapshots de btrfs. Antes de cada
+# transacción se copia a /.bootbackup, que sí está en el subvolumen @: así el
+# snapshot "pre" de snap-pac (05-snap-pac-pre.hook, se ejecuta después) lleva el
+# kernel y el initramfs que corresponden a sus módulos. Ver "Volver atrás" en el README.
+[Trigger]
+Operation = Upgrade
+Operation = Install
+Operation = Remove
+Type = Package
+Target = *
+
+[Action]
+Description = Copiando /boot a /.bootbackup (para los snapshots)...
+When = PreTransaction
+Exec = /usr/bin/sh -c 'mountpoint -q /boot && /usr/bin/rsync -a --delete /boot/ /.bootbackup/'

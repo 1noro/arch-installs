@@ -12,7 +12,6 @@ yq
 tmux
 zellij
 lf
-rsync
 rclone
 sshfs
 mediainfo

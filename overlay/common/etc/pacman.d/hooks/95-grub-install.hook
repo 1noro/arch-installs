@@ -1,0 +1,14 @@
+# Arch no reinstala GRUB en la ESP al actualizar el paquete: el grub.cfg nuevo
+# acabaría cargándose con el núcleo de GRUB viejo, y esa mezcla puede dejar el
+# equipo sin arrancar. Se reinstala igual que en la instalación: primero en la ruta
+# de respaldo EFI/BOOT/BOOTX64.EFI (la que usan las placas que ignoran la NVRAM) y
+# luego en la NVRAM (si esta falla, no se aborta).
+[Trigger]
+Operation = Upgrade
+Type = Package
+Target = grub
+
+[Action]
+Description = Reinstalando GRUB en la ESP y regenerando grub.cfg...
+When = PostTransaction
+Exec = /usr/bin/sh -c 'mountpoint -q /boot || { echo "/boot no está montado: GRUB sin reinstalar" >&2; exit 1; }; grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB --removable && { grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB || echo "grub-install (NVRAM) ha fallado; queda la ruta de respaldo" >&2; } && grub-mkconfig -o /boot/grub/grub.cfg'

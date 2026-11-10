@@ -86,6 +86,7 @@ configure_users() {
         useradd --create-home --shell "$USER_SHELL" --groups wheel "$USERNAME"
     fi
     usermod --password "$USER_HASH" "$USERNAME"
+    create_home_subvols
 
     # sudo para el grupo wheel (en sudoers.d, sin tocar /etc/sudoers)
     echo '%wheel ALL=(ALL:ALL) ALL' > /etc/sudoers.d/10-wheel
@@ -93,6 +94,25 @@ configure_users() {
     visudo -cf /etc/sudoers.d/10-wheel >/dev/null
 
     chown -R "$USERNAME:$USERNAME" /opt/arch-installs
+}
+
+# create_home_subvols: carpetas del usuario como subvolúmenes btrfs anidados en @home,
+# para que no entren en sus snapshots (ver HOME_SUBVOLS en hosts/defaults.conf)
+create_home_subvols() {
+    local -a dirs=("${HOME_SUBVOLS[@]}")
+    [[ " ${PACKAGE_SETS[*]} " == *" virt "* ]] && dirs+=(.vm)
+    [[ " ${PACKAGE_SETS[*]} " == *" gaming "* ]] && dirs+=(.local/share/Steam)
+    local d p home=/home/$USERNAME
+    for d in "${dirs[@]}"; do
+        p=$home/$d
+        [[ -e $p ]] && continue
+        runuser -u "$USERNAME" -- mkdir -p "${p%/*}"
+        btrfs subvolume create "$p" >/dev/null
+        chown "$USERNAME:$USERNAME" "$p"
+        log "subvolumen ~/$d"
+    done
+    # imágenes de VM: sin copy-on-write (evita la fragmentación; a cambio, sin checksums)
+    if [[ -d $home/.vm ]]; then chattr +C "$home/.vm"; fi
 }
 
 # los grupos extra se añaden tras instalar los paquetes (docker, vboxusers... no existen antes)
@@ -168,6 +188,9 @@ configure_boot() {
     set_kv /etc/default/grub GRUB_DISABLE_RECOVERY true
     set_kv /etc/default/grub GRUB_GFXMODE "$GRUB_GFXMODE"
     set_kv /etc/default/grub GRUB_GFXPAYLOAD_LINUX keep
+    # con linux-lts instalado, grub-mkconfig lo pondría primero (orden por nombre):
+    # la entrada por defecto debe ser el kernel normal; el LTS queda en "Opciones avanzadas"
+    set_kv /etc/default/grub GRUB_TOP_LEVEL '"/boot/vmlinuz-linux"'
     if [[ -f $REPO_DIR/assets/grub-bg.png ]]; then
         install -Dm644 "$REPO_DIR/assets/grub-bg.png" /boot/grub/grub-bg.png
         set_kv /etc/default/grub GRUB_BACKGROUND '"/boot/grub/grub-bg.png"'

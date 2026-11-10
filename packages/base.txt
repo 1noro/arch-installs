@@ -5,6 +5,8 @@
 base
 linux
 linux-headers      # necesario para los módulos DKMS (virtualbox, v4l2loopback...)
+linux-lts          # kernel de reserva: entrada en "Opciones avanzadas" de GRUB por si el nuevo falla
+linux-lts-headers  # DKMS compila sus módulos también para el LTS
 linux-firmware
 
 # sistema de ficheros
@@ -17,6 +19,7 @@ snapper
 snap-pac           # snapshots pre/post de cada transacción de pacman (no hace nada hasta que exista la config "root")
 grub-btrfs         # arrancar snapshots de snapper desde el menú de GRUB
 inotify-tools      # lo necesita grub-btrfsd (vigila /.snapshots); sin él el servicio falla
+rsync              # lo usa el hook 04-bootbackup (copia de /boot en cada snapshot)
 
 # arranque
 grub

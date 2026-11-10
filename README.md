@@ -76,7 +76,7 @@ activa los servicios de AUR. Es idempotente: si algo falla se puede relanzar.
 4. Responde `s` a *¿Reiniciar ahora?*, retira el USB.
 5. Entra en GDM como `cosmo`, abre una terminal y ejecuta `/opt/arch-installs/post-install.sh`
    (AUR, flatpak, dotfiles, snapper, Mullvad). Introduce la contraseña de sudo cuando la pida.
-6. Reinicia. Pendiente a mano: `/etc/nut/*` (SAI), perfiles de red de NetworkManager y la clave GPG para firmar commits (`.gitconfig` firma por defecto).
+6. Reinicia. Pendiente a mano: `/etc/nut/*` (SAI), perfiles de red de NetworkManager, la clave GPG para firmar commits (`.gitconfig` firma por defecto) y, si no está hecho, el firmware del NVMe (980 PRO: `5B2QGXA7`; comprobar con `sudo nvme list`).
 
 ### Instalar punk (ThinkPad T470)
 
@@ -119,12 +119,27 @@ GPT/UEFI. Todo se calcula en [`lib/disk.sh`](lib/disk.sh):
 
 | partición | tamaño                                  | uso                         |
 |-----------|-----------------------------------------|-----------------------------|
-| 1 `EFI`   | 1 GiB                                   | FAT32, montada en `/boot`   |
+| 1 `EFI`   | 1 GiB                                   | FAT32, montada en `/boot` (GRUB + `linux` + `linux-lts`, ~100 MiB) |
 | 2 `swap`  | = RAM (mín. 2 GiB, máx. 32 GiB)         | swap                        |
 | 3 `system`| el resto                                | btrfs con subvolúmenes      |
 
 Subvolúmenes (`compress=zstd:3,noatime`): `@` → `/`, `@home`, `@snapshots` →
 `/.snapshots`, `@var_log`, `@var_cache`, `@docker` → `/var/lib/docker`.
+
+Dentro de `@home`, `~/.cache` es un subvolumen propio (y también `~/.vm` con el conjunto
+`virt`, sin copy-on-write, y `~/.local/share/Steam` con `gaming`): así no entran en los
+snapshots horarios de `/home`. Se configura con `HOME_SUBVOLS` en `hosts/defaults.conf`.
+
+## Kernels y GRUB
+
+- Se instalan `linux` y **`linux-lts`** (con sus headers, para DKMS). La entrada por
+  defecto es `linux` (`GRUB_TOP_LEVEL`); el LTS está en *Opciones avanzadas*: si un
+  kernel nuevo no arranca, se elige el otro.
+- GRUB se instala en la NVRAM y en la ruta de respaldo `EFI/BOOT/BOOTX64.EFI`. El hook
+  `95-grub-install.hook` lo reinstala en las dos al actualizar el paquete `grub` y
+  regenera `grub.cfg`, para que nunca se mezcle un `grub.cfg` nuevo con un GRUB viejo.
+- Mantenimiento: `btrfs-scrub@-.timer` (scrub mensual), journal limitado a 200 MB
+  (`journald.conf.d/10-size.conf`) y `paccache -r` tras cada transacción.
 
 ## Snapshots
 
@@ -132,7 +147,11 @@ Se configuran en `post-install.sh` (snapper necesita el sistema arrancado):
 
 - **`/` (config `root`)**: `snap-pac` hace un snapshot *pre* y otro *post* en cada
   transacción de pacman (también las de paru). Se guardan los 10 últimos pares, más
-  10 pares *importantes* (actualizaciones del kernel y `pacman -Syu`). Sin timeline.
+  10 pares *importantes* (actualizaciones del kernel y `pacman -Syu`/`-Syyu`). Sin timeline.
+- **`/boot` dentro de cada snapshot**: la ESP es FAT32 y queda fuera de btrfs, así que
+  el hook `04-bootbackup.hook` la copia a `/.bootbackup` antes de cada transacción
+  (antes del snapshot *pre* de snap-pac). Cada snapshot lleva así el kernel y el
+  initramfs que corresponden a sus módulos.
 - **`/home` (config `home`)**: timeline cada hora; se conservan 5 horarios y 7 diarios.
 - `snapper-timeline.timer` y `snapper-cleanup.timer` crean y limpian los snapshots;
   `cosmo` puede usar `snapper` sin sudo (`ALLOW_USERS`).
@@ -140,12 +159,34 @@ Se configuran en `post-install.sh` (snapper necesita el sistema arrancado):
   El initramfs lleva el hook `grub-btrfs-overlayfs` (por eso usa `udev` en vez de
   `systemd`): un snapshot arrancado es de solo lectura con una capa en RAM, así que
   el sistema funciona pero los cambios se pierden al reiniciar.
-- **Volver a un snapshot**: arranca en él desde GRUB, comprueba que va bien y
-  ejecuta `sudo snapper rollback`; reinicia.
-- **Aviso**: `/boot` (la ESP, FAT32) no entra en los snapshots. Un snapshot anterior a
-  una actualización del kernel arranca con el kernel actual y no encuentra sus
-  módulos en `/usr/lib/modules`: sirve para rescatar ficheros o hacer el rollback,
-  pero tras el rollback hay que reinstalar el kernel (`sudo pacman -S linux`).
+- **Arrancar un snapshot desde GRUB** usa el kernel que hay *ahora* en `/boot`. Si la
+  actualización cambió `linux`, sus módulos no coinciden con los del snapshot: elige la
+  entrada del snapshot con `linux-lts` (que casi nunca se actualiza a la vez) o usa
+  directamente el método de abajo desde un USB.
+
+### Volver atrás (rollback)
+
+`sudo snapper rollback` **no sirve** con este esquema: el fstab monta `subvol=/@` y
+`grub-mkconfig` añade `rootflags=subvol=@`, así que cambiar el subvolumen por defecto
+no tiene efecto. Se hace a mano, desde un snapshot arrancado en GRUB o desde el USB:
+
+```bash
+sudo snapper -c root list          # elige el número del snapshot "pre" del -Syu problemático
+N=123
+sudo mount -o subvolid=5 /dev/disk/by-label/system /mnt
+sudo mv /mnt/@ "/mnt/@.roto-$(date +%F)"
+sudo btrfs subvolume snapshot "/mnt/@snapshots/$N/snapshot" /mnt/@
+# /boot de ese momento (kernel, initramfs y GRUB coherentes con el snapshot)
+sudo mount --mkdir /dev/disk/by-label/EFI /mnt-esp
+sudo rsync -a --delete /mnt/@/.bootbackup/ /mnt-esp/
+sudo umount /mnt-esp /mnt
+reboot
+```
+
+`/home`, `/var/log`, `/var/cache` y Docker son subvolúmenes aparte y no cambian. Cuando
+todo vaya bien, borra el subvolumen roto (antes, mira con
+`sudo btrfs subvolume list -o /mnt/@.roto-FECHA` si tiene subvolúmenes anidados, como
+`var/lib/machines`, y bórralos primero): `sudo btrfs subvolume delete /mnt/@.roto-FECHA`.
 
 ## Estructura
 
@@ -171,6 +212,7 @@ packages/
   <set>.aur.txt         paquetes AUR del conjunto
   flatpak.txt           aplicaciones Flatpak
   gpg-keys.txt          claves PGP que piden los PKGBUILD de AUR
+overlay/common/         ficheros que se copian a / en todos los equipos (hooks de pacman, journald)
 assets/                 fondo de GRUB y fondos de pantalla
 docs/                   notas sueltas
 legacy/                 koi, ghost y scripts antiguos

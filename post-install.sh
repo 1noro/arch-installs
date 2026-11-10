@@ -166,10 +166,11 @@ setup_snapper() {
         TIMELINE_LIMIT_HOURLY=5 TIMELINE_LIMIT_DAILY=7 TIMELINE_LIMIT_WEEKLY=0 \
         TIMELINE_LIMIT_MONTHLY=0 TIMELINE_LIMIT_YEARLY=0 "ALLOW_USERS=$USER" SYNC_ACL=yes
     # snap-pac marca como importantes las actualizaciones del kernel y los -Syu
+    # (compara el comando exacto: por eso van las dos variantes)
     sudo tee /etc/snap-pac.ini >/dev/null <<'EOF'
 [root]
 important_packages = ["linux", "linux-lts"]
-important_commands = ["pacman -Syu"]
+important_commands = ["pacman -Syu", "pacman -Syyu"]
 EOF
     sudo systemctl enable --now snapper-timeline.timer snapper-cleanup.timer
 
