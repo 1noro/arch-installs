@@ -1,0 +1,6 @@
+# Solo silencian los "WARNING: Possibly missing firmware" de mkinitcpio. En el
+# script antiguo los dejaste comentados ("probar sin ellos"), pero en el mpu real
+# están instalados; los dejo para reproducirlo. Bórralos si no los quieres.
+aic94xx-firmware
+wd719x-firmware
+upd72020x-fw

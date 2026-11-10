@@ -1,0 +1,3 @@
+cgoban3
+lib32-openssl-1.0        # necesario para Civilization VI
+sidequest-bin

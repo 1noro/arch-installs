@@ -1,0 +1,41 @@
+# Se instala con pacstrap en el paso 1 (archiso). Lo mínimo para arrancar,
+# tener red, y poder terminar la configuración dentro del chroot.
+# (el microcódigo intel-ucode / amd-ucode se añade solo según la CPU)
+
+base
+linux
+linux-headers      # necesario para los módulos DKMS (virtualbox, v4l2loopback...)
+linux-firmware
+
+# sistema de ficheros
+btrfs-progs
+dosfstools
+e2fsprogs
+exfatprogs         # sustituye al antiguo exfat-utils
+ntfs-3g
+snapper
+snap-pac           # snapshots pre/post de cada transacción de pacman (no hace nada hasta que exista la config "root")
+grub-btrfs         # arrancar snapshots de snapper desde el menú de GRUB
+inotify-tools      # lo necesita grub-btrfsd (vigila /.snapshots); sin él el servicio falla
+
+# arranque
+grub
+efibootmgr
+
+# red
+networkmanager     # gestiona también el wifi (usa wpa_supplicant como backend)
+wireless-regdb     # base de datos de dominios regulatorios wifi (sin ella: "regulatory.db failed" al arrancar)
+openssh
+
+# herramientas base
+base-devel
+sudo
+git
+neovim
+nano
+bash-completion
+man-db
+man-pages
+texinfo
+reflector
+pacman-contrib     # paccache, checkupdates

@@ -1,0 +1,12 @@
+# Edición de imagen, audio, vídeo y 3D.
+gimp
+inkscape
+darktable
+blender
+audacity
+qtractor
+obs-studio
+mkvtoolnix-gui
+fontforge
+libopenraw         # .dng, .cr2, .nef... en gdk-pixbuf
+webp-pixbuf-loader

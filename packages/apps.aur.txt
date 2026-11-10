@@ -1,0 +1,9 @@
+brave-bin
+tor-browser-bin
+autofirma
+jdownloader2
+woeusb
+feishin-bin
+scrobbler                # cliente last.fm (arrastra python-lfm)
+play-with-mpv-git
+mullvad-vpn-bin

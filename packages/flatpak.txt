@@ -1,0 +1,25 @@
+# Aplicaciones Flatpak (Flathub, instalación de usuario).
+cafe.avery.Delfin
+cc.spek.Spek
+com.calibre_ebook.calibre
+com.getpostman.Postman
+com.github.tchx84.Flatseal
+com.github.wwmm.easyeffects
+com.onepassword.OnePassword
+com.rafaelmardojai.WebfontKitGenerator
+fi.skyjake.Lagrange
+io.dbeaver.DBeaverCommunity
+io.gitlab.librewolf-community
+io.missioncenter.MissionCenter
+it.mijorus.gearlever
+net.sapples.LiveCaptions
+org.fedoraproject.MediaWriter
+org.gnome.EasyTAG
+org.gnome.Epiphany
+org.gnome.World.PikaBackup
+org.gnome.design.Emblem
+org.gnome.gitlab.YaLTeR.Identity
+org.jellyfin.JellyfinDesktop
+org.kde.subtitlecomposer
+org.openttd.OpenTTD
+org.signal.Signal

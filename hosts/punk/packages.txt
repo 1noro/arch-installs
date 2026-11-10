@@ -1,0 +1,19 @@
+# Específico del ThinkPad T470.
+
+# --- gráficos Intel HD 620 (Kaby Lake)
+mesa
+mesa-utils
+vulkan-intel
+vulkan-tools
+intel-media-driver   # VA-API (iHD) para Broadwell y posteriores
+libva-utils
+intel-gpu-tools      # intel_gpu_top
+
+# --- energía y térmica
+tlp                  # umbrales de batería, ASPM, USB autosuspend...
+tlp-pd               # API de power-profiles-daemon sobre TLP (selector "Modo de energía" de GNOME)
+thermald
+smartmontools
+
+# --- firmware
+fwupd                # actualizaciones de BIOS/EC/NVMe vía LVFS
